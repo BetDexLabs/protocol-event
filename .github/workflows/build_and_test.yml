@@ -54,10 +54,13 @@ jobs:
             target/release/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
+      - name: Rustup
+        run: |           
+          rustup default stable
+
       - name: Install Solana
         if: steps.cache-solana.outputs.cache-hit != 'true'
         run: |
-          rustup default stable
           SOLANA_INSTALLER_URL=https://release.solana.com/${{ env.SOLANA_VERSION }}/install
           echo $SOLANA_INSTALLER_URL
           sh -c "$(curl -sSfL $SOLANA_INSTALLER_URL)"
