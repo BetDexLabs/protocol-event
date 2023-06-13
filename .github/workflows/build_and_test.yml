@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SOLANA_VERSION: ${{ vars.ORG_SOLANA_VERSION }}
+      SOLANA_VERSION: ${{ secrets.ORG_SOLANA_VERSION }}
       SOLANA_PATH: /home/runner/.local/share/solana/install/active_release/bin
       PROGRAM: protocol_event
 
