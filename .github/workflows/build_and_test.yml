@@ -72,7 +72,6 @@ jobs:
 
       - name: Anchor build & test
         run: |
-          set -o pipefail
           solana-keygen new --no-bip39-passphrase --force
           yarn
           yarn test
