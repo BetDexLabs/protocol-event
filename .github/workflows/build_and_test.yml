@@ -16,11 +16,11 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: projectserum/build:v0.27.0
 
     env:
       SOLANA_VERSION: ${{ secrets.ORG_SOLANA_VERSION }}
       SOLANA_PATH: /home/runner/.local/share/solana/install/active_release/bin
-      PROGRAM: protocol_event
 
     steps:
       - name: Checkout repo
@@ -53,10 +53,13 @@ jobs:
             target/release/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
+      - name: Rustup
+        run: |           
+          rustup default stable
+
       - name: Install Solana
         if: steps.cache-solana.outputs.cache-hit != 'true'
         run: |
-          rustup default stable
           SOLANA_INSTALLER_URL=https://release.solana.com/${{ env.SOLANA_VERSION }}/install
           echo $SOLANA_INSTALLER_URL
           sh -c "$(curl -sSfL $SOLANA_INSTALLER_URL)"
@@ -69,19 +72,8 @@ jobs:
         run: |
           solana --version
 
-      - name: Install anchor
-        run: |
-          sudo apt update
-          sudo apt install -y libudev-dev
-          sudo apt install -y pkg-config
-          ANCHOR_VERSION=`grep -A1 'name = "anchor-lang"' Cargo.lock | tail -n 1 | cut -d = -f 2 | xargs`
-          echo "Installing anchor-cli version ${ANCHOR_VERSION}"
-          cargo install --git https://github.com/project-serum/anchor --tag v${ANCHOR_VERSION} anchor-cli --locked
-          anchor --version
-
       - name: Anchor build & test
         run: |
-          set -o pipefail
           solana-keygen new --no-bip39-passphrase --force
           yarn
           yarn test
