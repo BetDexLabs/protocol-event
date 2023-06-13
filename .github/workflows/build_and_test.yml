@@ -16,6 +16,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: projectserum/build:v0.27.0
 
     env:
       SOLANA_VERSION: ${{ secrets.ORG_SOLANA_VERSION }}
@@ -68,16 +69,6 @@ jobs:
       - name: Check Solana Version
         run: |
           solana --version
-
-      - name: Install anchor
-        run: |
-          sudo apt update
-          sudo apt install -y libudev-dev
-          sudo apt install -y pkg-config
-          ANCHOR_VERSION=`grep -A1 'name = "anchor-lang"' Cargo.lock | tail -n 1 | cut -d = -f 2 | xargs`
-          echo "Installing anchor-cli version ${ANCHOR_VERSION}"
-          cargo install --git https://github.com/project-serum/anchor --tag v${ANCHOR_VERSION} anchor-cli --locked
-          anchor --version
 
       - name: Anchor build & test
         run: |
