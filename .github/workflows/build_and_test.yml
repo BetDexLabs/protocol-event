@@ -2,6 +2,8 @@ name: CI - Build Protocol Event Program
 
 on:
   pull_request:
+    branches:
+      - '**'
     types: [ opened, reopened, synchronize, ready_for_review ]
     paths:
       - 'programs/protocol_event/**'
