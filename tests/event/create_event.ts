@@ -11,7 +11,7 @@ describe("Create Event", () => {
   it("Create Event - Success", async () => {
     const eventProgram = anchor.workspace.ProtocolEvent;
 
-    const name = "TEST NAME";
+    const name = "A TEST NAME";
     const slug = "test-name";
     const eventType = EventType.AVB;
     const startTime = 1924200000;
