@@ -17,7 +17,7 @@ describe("Create Event", () => {
     const startTime = 1924200000;
 
     const oracle = "TEST ORACLE";
-    const reference = "A TEST REFERENCE";
+    const reference = "TEST REFERENCE";
 
     const participants = ["A", "B", "C"];
 
