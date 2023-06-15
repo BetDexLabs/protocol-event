@@ -21,8 +21,3 @@ export type EventGroup = {
   id: string;
   name: string;
 };
-
-export type Participant = {
-  id: string;
-  name: string;
-};
