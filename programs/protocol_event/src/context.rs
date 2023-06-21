@@ -19,8 +19,11 @@ pub struct CreateEvent<'info> {
         space = Event::SIZE
     )]
     pub event: Account<'info, Event>,
-    pub category: Account<'info, Category>,
+
+    #[account(has_one = category)]
     pub event_group: Account<'info, EventGroup>,
+    pub category: Account<'info, Category>,
+
     #[account(mut)]
     pub authority: Signer<'info>,
     #[account(address = system_program::ID)]

@@ -14,9 +14,6 @@ pub const F64_SIZE: usize = 8;
 pub const PUB_KEY_SIZE: usize = 32;
 pub const CHAR_SIZE: usize = 4;
 
-pub const MAX_CODE_LENGTH: usize = 8;
-pub const MAX_NAME_STRING_LENGTH: usize = 50;
-
 const OPTION_PREFIX_SIZE: usize = 1;
 pub const fn option_size(element_size: usize) -> usize {
     OPTION_PREFIX_SIZE + element_size

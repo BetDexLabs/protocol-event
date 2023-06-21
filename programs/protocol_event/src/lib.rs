@@ -83,4 +83,3 @@ pub mod protocol_event {
     }
 
 }
-

@@ -1,5 +1,8 @@
 use anchor_lang::prelude::*;
-use crate::state::type_size::{CHAR_SIZE, MAX_CODE_LENGTH, MAX_NAME_STRING_LENGTH, PUB_KEY_SIZE, U16_SIZE, vec_size};
+use crate::state::type_size::{CHAR_SIZE, PUB_KEY_SIZE, U16_SIZE, vec_size};
+
+pub const MAX_CODE_LENGTH: usize = 8;
+pub const MAX_NAME_STRING_LENGTH: usize = 50;
 
 #[account]
 pub struct Category {

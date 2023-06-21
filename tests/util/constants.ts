@@ -10,16 +10,6 @@ export type CreateEventInfo = {
   actualEndTimestamp: BN | null;
 };
 
-export type Category = {
-  id: string;
-  name: string;
-};
-
-export type EventGroup = {
-  id: string;
-  name: string;
-};
-
 export enum ParticipantType {
   Individual,
   Team,

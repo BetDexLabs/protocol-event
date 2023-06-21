@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
-use crate::state::type_size::{CHAR_SIZE, DISCRIMINATOR_SIZE, ENUM_SIZE, MAX_CODE_LENGTH, MAX_NAME_STRING_LENGTH, PUB_KEY_SIZE, U16_SIZE, vec_size};
+use crate::state::grouping::{MAX_CODE_LENGTH, MAX_NAME_STRING_LENGTH};
+use crate::state::type_size::{CHAR_SIZE, DISCRIMINATOR_SIZE, ENUM_SIZE, PUB_KEY_SIZE, U16_SIZE, vec_size};
 
 #[account]
 pub struct Participant {
@@ -27,5 +28,3 @@ impl Participant {
         + vec_size(CHAR_SIZE, MAX_CODE_LENGTH)
         + U16_SIZE;
 }
-
-
