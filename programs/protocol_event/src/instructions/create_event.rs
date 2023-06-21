@@ -1,11 +1,8 @@
 use anchor_lang::prelude::*;
 use crate::CreateEvent;
-use crate::state::event::{Category, EventGroup};
 
 #[derive(AnchorSerialize, AnchorDeserialize, Debug, Clone, PartialEq)]
 pub struct CreateEventInfo {
-    pub category: Category,
-    pub event_group: EventGroup,
     pub slug: String,
     pub name: String,
     pub participants: Vec<u16>,
@@ -23,8 +20,8 @@ pub fn create(
     event.authority = ctx.accounts.authority.key();
     event.payer = ctx.accounts.authority.key();
 
-    event.category = event_info.category;
-    event.event_group = event_info.event_group;
+    event.category = ctx.accounts.category.key();
+    event.event_group = ctx.accounts.event_group.key();
 
     event.active = false;
 

@@ -2,8 +2,6 @@ import { BN } from "@coral-xyz/anchor";
 
 // TODO port these to monaco client
 export type CreateEventInfo = {
-  category: Category;
-  eventGroup: EventGroup;
   slug: string;
   name: string;
   participants: number[];
@@ -22,7 +20,7 @@ export type EventGroup = {
   name: string;
 };
 
-export type Participant = {
-  id: string;
-  name: string;
-};
+export enum ParticipantType {
+  Individual,
+  Team,
+}

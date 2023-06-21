@@ -14,11 +14,13 @@ declare_id!("5qCutonYoeg1aRK31mv4oQYoKdNFMpPaEtDe9nnNQXXf");
 pub mod protocol_event {
     use super::*;
 
+    // Event management instructions
+
     pub fn create_event(
         ctx: Context<CreateEvent>,
         event_info: CreateEventInfo,
     ) -> Result<()> {
-        instructions::create(ctx, event_info)?;
+        instructions::create_event::create(ctx, event_info)?;
         Ok(())
     }
 
@@ -26,22 +28,22 @@ pub mod protocol_event {
         ctx: Context<UpdateEvent>,
         _slug: String,
     ) -> Result<()> {
-        instructions::update::update_active_flag(ctx, true)
+        instructions::update_event::update_active_flag(ctx, true)
     }
 
     pub fn deactivate_event(
         ctx: Context<UpdateEvent>,
         _slug: String,
     ) -> Result<()> {
-        instructions::update::update_active_flag(ctx, false)
+        instructions::update_event::update_active_flag(ctx, false)
     }
 
-    pub fn update_participants(
+    pub fn update_event_participants(
         ctx: Context<UpdateEvent>,
         _slug: String,
         participants: Vec<u16>,
     ) -> Result<()> {
-        instructions::update::update_participants(ctx, participants)
+        instructions::update_event::update_participants(ctx, participants)
     }
 
     pub fn update_expected_start_timestamp(
@@ -49,7 +51,36 @@ pub mod protocol_event {
         _slug: String,
         updated_timestamp: i64,
     ) -> Result<()> {
-        instructions::update::updated_expected_start_timestamp(ctx, updated_timestamp)
+        instructions::update_event::updated_expected_start_timestamp(ctx, updated_timestamp)
     }
+
+    // Participant management instructions
+
+    pub fn create_individual_participant(
+        ctx: Context<CreateParticipant>,
+        code: String,
+        name: String,
+    ) -> Result<()> {
+        instructions::create_participant::create_individual_participant(ctx, code, name)
+    }
+
+    pub fn create_team_participant(
+        ctx: Context<CreateParticipant>,
+        code: String,
+        name: String,
+    ) -> Result<()> {
+        instructions::create_participant::create_team_participant(ctx, code, name)
+    }
+
+    // Grouping management instructions
+
+    pub fn create_category(ctx: Context<CreateCategory>, code: String, name: String) -> Result<()> {
+        instructions::create_grouping::create_category(ctx, code, name)
+    }
+
+    pub fn create_event_group(ctx: Context<CreateEventGroup>, code: String, name: String) -> Result<()> {
+        instructions::create_grouping::create_event_group(ctx, code, name)
+    }
+
 }
 
