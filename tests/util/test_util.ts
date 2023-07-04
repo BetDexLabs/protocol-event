@@ -16,8 +16,8 @@ export async function createEventAccount(
   createEventInfo: CreateEventInfo,
   categoryPk: PublicKey,
   eventGroupPk: PublicKey,
-  program: Program<ProtocolEvent>,
 ) {
+  const program = anchor.workspace.ProtocolEvent;
   const eventPk = findEventPda(createEventInfo.slug, program as Program);
   await program.methods
     .createEvent(createEventInfo)
@@ -34,6 +34,26 @@ export async function createEventAccount(
       throw e;
     });
   return eventPk;
+}
+
+export async function addEventParticipants(
+  eventSlug: string,
+  participants: number[],
+) {
+  const program = anchor.workspace.ProtocolEvent;
+  const eventPk = findEventPda(eventSlug, program as Program);
+
+  await program.methods
+    .addEventParticipants(eventSlug, participants)
+    .accounts({
+      event: eventPk,
+      authority: program.provider.publicKey,
+    })
+    .rpc()
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
 }
 
 export async function createCategory(

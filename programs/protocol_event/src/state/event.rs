@@ -23,7 +23,7 @@ pub struct Event {
 impl Event {
     const MAX_EVENT_SLUG_LENGTH: usize = 25;
     const MAX_EVENT_NAME_LENGTH: usize = 50;
-    const MAX_PARTICIPANTS: usize = 300;
+    pub const MAX_PARTICIPANTS: usize = 300;
 
     pub const SIZE: usize =
         DISCRIMINATOR_SIZE

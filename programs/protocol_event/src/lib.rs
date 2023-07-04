@@ -1,6 +1,7 @@
 pub mod context;
 pub mod instructions;
 pub mod state;
+pub mod error;
 
 use anchor_lang::prelude::*;
 
@@ -38,12 +39,27 @@ pub mod protocol_event {
         instructions::update_event::update_active_flag(ctx, false)
     }
 
-    pub fn update_event_participants(
+    pub fn add_event_participants(
         ctx: Context<UpdateEvent>,
         _slug: String,
-        participants: Vec<u16>,
+        participants_to_add: Vec<u16>,
     ) -> Result<()> {
-        instructions::update_event::update_participants(ctx, participants)
+        instructions::update_event::add_participants(
+            &mut ctx.accounts.event.participants,
+            participants_to_add
+        )
+    }
+
+
+    pub fn remove_event_participants(
+        ctx: Context<UpdateEvent>,
+        _slug: String,
+        participants_to_remove: Vec<u16>,
+    ) -> Result<()> {
+        instructions::update_event::remove_participants(
+            &mut ctx.accounts.event.participants,
+            participants_to_remove
+        )
     }
 
     pub fn update_expected_start_timestamp(
