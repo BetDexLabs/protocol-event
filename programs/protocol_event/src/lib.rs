@@ -50,7 +50,6 @@ pub mod protocol_event {
         )
     }
 
-
     pub fn remove_event_participants(
         ctx: Context<UpdateEvent>,
         _slug: String,
