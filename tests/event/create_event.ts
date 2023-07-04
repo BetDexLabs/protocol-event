@@ -1,7 +1,7 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import assert from "assert";
-import { createEventAccount } from "../util/test_util";
+import { addEventParticipants, createEventAccount } from "../util/test_util";
 import { CreateEventInfo } from "../util/constants";
 import {
   eplEventGroupPda,
@@ -29,7 +29,6 @@ describe("Create Event", () => {
       createEventInfo,
       footballCategoryPda(),
       eplEventGroupPda(),
-      eventProgram,
     );
 
     const eventPk = await findEventPda(slug, eventProgram as Program);
@@ -38,5 +37,13 @@ describe("Create Event", () => {
     assert.equal(createdAccount.name, name);
     assert.equal(createdAccount.slug, slug);
     assert.equal(createdAccount.expectedStartTimestamp.toNumber(), startTime);
+
+    const participants = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    await addEventParticipants(slug, participants);
+
+    const eventWithParticipants = await eventProgram.account.event.fetch(
+      eventPk,
+    );
+    assert.deepEqual(eventWithParticipants.participants, participants);
   });
 });

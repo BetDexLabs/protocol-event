@@ -32,7 +32,6 @@ describe("Update Event", () => {
       createEventInfo,
       footballCategoryPda(),
       eplEventGroupPda(),
-      eventProgram,
     );
 
     const createdAccount = await eventProgram.account.event.fetch(eventPk);
