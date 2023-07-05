@@ -1,7 +1,7 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { ProtocolEvent } from "../../target/types/protocol_event";
-import { CreateEventInfo, ParticipantType } from "./constants";
+import { CreateEventInfo } from "./constants";
 import {
   findCategoryPda,
   findEventGroupPda,
@@ -78,23 +78,6 @@ export async function createEventGroup(
       throw e;
     });
   return eventGroupPk;
-}
-
-export async function createParticipant(
-  program: Program<ProtocolEvent>,
-  categoryPk: PublicKey,
-  code: string,
-  name: string,
-  participantType: ParticipantType,
-) {
-  switch (participantType) {
-    case ParticipantType.Individual:
-      await createIndividualParticipant(program, categoryPk, code, name);
-      break;
-    case ParticipantType.Team:
-      await createTeamParticipant(program, categoryPk, code, name);
-      break;
-  }
 }
 
 export async function createIndividualParticipant(

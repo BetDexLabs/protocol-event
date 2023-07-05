@@ -1,5 +1,6 @@
 use crate::instructions::CreateEventInfo;
-use crate::state::grouping::{Category, EventGroup};
+use crate::state::category::Category;
+use crate::state::event_group::EventGroup;
 use crate::state::participant::Participant;
 use crate::Event;
 use anchor_lang::prelude::*;
