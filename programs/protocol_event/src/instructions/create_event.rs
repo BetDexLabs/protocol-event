@@ -18,16 +18,10 @@ pub fn create(
     authority: Pubkey,
     payer: Pubkey,
     category: Pubkey,
+    category_participant_count: u16,
     event_group: Pubkey,
 ) -> Result<()> {
-    require!(
-        event_info.name.len() <= Event::MAX_NAME_LENGTH,
-        EventError::MaxStringLengthExceeded,
-    );
-    require!(
-        event_info.slug.len() <= Event::MAX_SLUG_LENGTH,
-        EventError::MaxStringLengthExceeded,
-    );
+    validate_event(&event_info, category_participant_count)?;
 
     event.authority = authority;
     event.payer = payer;
@@ -49,9 +43,33 @@ pub fn create(
     Ok(())
 }
 
+fn validate_event(event_info: &CreateEventInfo, category_participant_count: u16) -> Result<()> {
+    require!(
+        event_info.name.len() <= Event::MAX_NAME_LENGTH,
+        EventError::MaxStringLengthExceeded,
+    );
+    require!(
+        event_info.slug.len() <= Event::MAX_SLUG_LENGTH,
+        EventError::MaxStringLengthExceeded,
+    );
+    require!(
+        event_info.participants.len() <= Event::MAX_PARTICIPANTS,
+        EventError::MaxParticipantsExceeded,
+    );
+    require!(
+        event_info
+            .participants
+            .iter()
+            .all(|&participant| (1..=category_participant_count).contains(&participant)),
+        EventError::InvalidEventParticipants,
+    );
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use crate::error::EventError;
+    use crate::instructions::create_event::validate_event;
     use crate::instructions::{create, CreateEventInfo};
     use crate::state::event::Event;
     use anchor_lang::error;
@@ -59,12 +77,24 @@ mod tests {
 
     #[test]
     fn test_create_event() {
-        let mut new_event = event();
+        let mut new_event = Event {
+            category: Default::default(),
+            event_group: Default::default(),
+            active: false,
+            authority: Default::default(),
+            payer: Default::default(),
+            slug: "".to_string(),
+            name: "".to_string(),
+            participants: vec![],
+            expected_start_timestamp: 0,
+            actual_start_timestamp: None,
+            actual_end_timestamp: None,
+        };
 
         let event_info = CreateEventInfo {
             slug: "LAFCvLAG@2021-08-28".to_string(),
             name: "Los Angeles Football Club vs. LA Galaxy".to_string(),
-            participants: vec![],
+            participants: vec![1, 2, 3, 4, 5],
             expected_start_timestamp: 1630156800,
             actual_start_timestamp: None,
             actual_end_timestamp: None,
@@ -80,6 +110,7 @@ mod tests {
             authority,
             authority,
             category,
+            10,
             event_group,
         );
 
@@ -94,14 +125,14 @@ mod tests {
             new_event.name,
             "Los Angeles Football Club vs. LA Galaxy".to_string()
         );
-        assert_eq!(new_event.participants, vec![]);
+        assert_eq!(new_event.participants, vec![1, 2, 3, 4, 5]);
         assert_eq!(new_event.expected_start_timestamp, 1630156800);
         assert_eq!(new_event.actual_start_timestamp, None);
         assert_eq!(new_event.actual_end_timestamp, None);
     }
 
     #[test]
-    fn test_create_event_name_length_exceeds_limit() {
+    fn test_validate_event_name_length_exceeds_limit() {
         let event_info = CreateEventInfo {
             slug: "LAFCvLAG@2021-08-28".to_string(),
             name: "012345678901234567890123456789012345678901234567890".to_string(),
@@ -111,20 +142,13 @@ mod tests {
             actual_end_timestamp: None,
         };
 
-        let result = create(
-            &mut event(),
-            event_info,
-            Pubkey::new_unique(),
-            Pubkey::new_unique(),
-            Pubkey::new_unique(),
-            Pubkey::new_unique(),
-        );
+        let result = validate_event(&event_info, 10);
 
         assert_eq!(result, Err(error!(EventError::MaxStringLengthExceeded)));
     }
 
     #[test]
-    fn test_create_event_slug_length_exceeds_limit() {
+    fn test_validate_event_slug_length_exceeds_limit() {
         let event_info = CreateEventInfo {
             slug: "012345678901234567890123456789".to_string(),
             name: "Los Angeles Football Club vs. LA Galaxy".to_string(),
@@ -134,31 +158,42 @@ mod tests {
             actual_end_timestamp: None,
         };
 
-        let result = create(
-            &mut event(),
-            event_info,
-            Pubkey::new_unique(),
-            Pubkey::new_unique(),
-            Pubkey::new_unique(),
-            Pubkey::new_unique(),
-        );
+        let result = validate_event(&event_info, 10);
 
         assert_eq!(result, Err(error!(EventError::MaxStringLengthExceeded)));
     }
 
-    fn event() -> Event {
-        Event {
-            category: Default::default(),
-            event_group: Default::default(),
-            active: false,
-            authority: Default::default(),
-            payer: Default::default(),
-            slug: "".to_string(),
-            name: "".to_string(),
-            participants: vec![],
-            expected_start_timestamp: 0,
+    #[test]
+    fn test_validate_event_participants_exceeds_limit() {
+        let participants: Vec<u16> = (1..=301).map(|num| num as u16).collect();
+        let event_info = CreateEventInfo {
+            slug: "LAFCvLAG@2021-08-28".to_string(),
+            name: "Los Angeles Football Club vs. LA Galaxy".to_string(),
+            participants,
+            expected_start_timestamp: 1630156800,
             actual_start_timestamp: None,
             actual_end_timestamp: None,
-        }
+        };
+
+        let result = validate_event(&event_info, 300);
+
+        assert_eq!(result, Err(error!(EventError::MaxParticipantsExceeded)));
+    }
+
+    #[test]
+    fn test_validate_event_participants_not_in_category() {
+        let participants: Vec<u16> = (1..=20).map(|num| num as u16).collect();
+        let event_info = CreateEventInfo {
+            slug: "LAFCvLAG@2021-08-28".to_string(),
+            name: "Los Angeles Football Club vs. LA Galaxy".to_string(),
+            participants,
+            expected_start_timestamp: 1630156800,
+            actual_start_timestamp: None,
+            actual_end_timestamp: None,
+        };
+
+        let result = validate_event(&event_info, 10);
+
+        assert_eq!(result, Err(error!(EventError::InvalidEventParticipants)));
     }
 }

@@ -22,6 +22,7 @@ pub mod protocol_event {
             ctx.accounts.authority.key(),
             ctx.accounts.authority.key(),
             ctx.accounts.category.key(),
+            ctx.accounts.category.participant_count,
             ctx.accounts.event_group.key(),
         )?;
         Ok(())
@@ -59,9 +60,9 @@ pub mod protocol_event {
     pub fn create_category(ctx: Context<CreateCategory>, code: String, name: String) -> Result<()> {
         instructions::create_grouping::create_category(
             &mut ctx.accounts.category,
+            ctx.accounts.payer.key(),
             code,
             name,
-            ctx.accounts.payer.key(),
         )
     }
 
