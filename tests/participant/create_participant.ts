@@ -72,7 +72,7 @@ describe("Create Participants", () => {
     );
 
     const participant = await program.account.participant.fetch(participant1Pk);
-    assert.equal(0, participant.id);
+    assert.equal(1, participant.id);
     assert.equal(code, participant.code);
 
     const code2 = "EWANM2";
@@ -86,7 +86,7 @@ describe("Create Participants", () => {
     const participant2 = await program.account.participant.fetch(
       participant2Pk,
     );
-    assert.equal(1, participant2.id);
+    assert.equal(2, participant2.id);
     assert.equal(code2, participant2.code);
 
     const code3 = "EWANM3";
@@ -100,7 +100,7 @@ describe("Create Participants", () => {
     const participant3 = await program.account.participant.fetch(
       participant3Pk,
     );
-    assert.equal(2, participant3.id);
+    assert.equal(3, participant3.id);
     assert.equal(code3, participant3.code);
 
     const category = await program.account.category.fetch(categoryPk);

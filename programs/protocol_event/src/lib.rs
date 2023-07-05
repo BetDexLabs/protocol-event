@@ -89,7 +89,17 @@ pub mod protocol_event {
         code: String,
         name: String,
     ) -> Result<()> {
-        instructions::create_participant::create_individual_participant(ctx, code, name)
+        instructions::update_grouping::increment_category_participant_count(
+            &mut ctx.accounts.category,
+        )?;
+        instructions::create_participant::create_individual_participant(
+            &mut ctx.accounts.participant,
+            &ctx.accounts.category.key(),
+            &ctx.accounts.payer.key(),
+            code,
+            name,
+            ctx.accounts.category.participant_count,
+        )
     }
 
     pub fn create_team_participant(
@@ -97,6 +107,16 @@ pub mod protocol_event {
         code: String,
         name: String,
     ) -> Result<()> {
-        instructions::create_participant::create_team_participant(ctx, code, name)
+        instructions::update_grouping::increment_category_participant_count(
+            &mut ctx.accounts.category,
+        )?;
+        instructions::create_participant::create_team_participant(
+            &mut ctx.accounts.participant,
+            &ctx.accounts.category.key(),
+            &ctx.accounts.payer.key(),
+            code,
+            name,
+            ctx.accounts.category.participant_count,
+        )
     }
 }

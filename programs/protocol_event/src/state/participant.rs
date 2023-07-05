@@ -10,8 +10,8 @@ pub struct Participant {
 
     pub name: String,
     pub code: String,
-
     pub id: u16,
+
     pub payer: Pubkey,
 }
 
@@ -26,7 +26,7 @@ impl Participant {
     pub const MAX_NAME_LENGTH: usize = 50;
 
     pub const SIZE: usize = DISCRIMINATOR_SIZE
-        + PUB_KEY_SIZE * 3
+        + PUB_KEY_SIZE * 2
         + ENUM_SIZE
         + vec_size(CHAR_SIZE, Participant::MAX_NAME_LENGTH)
         + vec_size(CHAR_SIZE, Participant::MAX_CODE_LENGTH)
