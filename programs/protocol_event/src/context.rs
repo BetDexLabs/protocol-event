@@ -1,9 +1,9 @@
-use anchor_lang::prelude::*;
-use anchor_lang::solana_program::system_program;
-use crate::Event;
 use crate::instructions::CreateEventInfo;
 use crate::state::grouping::{Category, EventGroup};
 use crate::state::participant::Participant;
+use crate::Event;
+use anchor_lang::prelude::*;
+use anchor_lang::solana_program::system_program;
 
 #[derive(Accounts)]
 #[instruction(event_info: CreateEventInfo)]
@@ -44,7 +44,7 @@ pub struct UpdateEvent<'info> {
     )]
     pub event: Account<'info, Event>,
     #[account(mut)]
-    pub authority: Signer<'info>
+    pub authority: Signer<'info>,
 }
 
 #[derive(Accounts)]
@@ -90,7 +90,6 @@ pub struct CreateCategory<'info> {
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
 }
-
 
 #[derive(Accounts)]
 #[instruction(code: String)]

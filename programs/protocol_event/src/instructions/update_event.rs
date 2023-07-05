@@ -1,7 +1,8 @@
 use anchor_lang::prelude::*;
+
 use crate::error::EventError;
-use crate::UpdateEvent;
 use crate::state::event::Event;
+use crate::UpdateEvent;
 
 pub fn update_active_flag(ctx: Context<UpdateEvent>, active: bool) -> Result<()> {
     let event = &mut ctx.accounts.event;
@@ -26,7 +27,10 @@ pub fn add_participants(participants: &mut Vec<u16>, participants_to_add: Vec<u1
     Ok(())
 }
 
-pub fn remove_participants(participants: &mut Vec<u16>, participants_to_remove: Vec<u16>) -> Result<()> {
+pub fn remove_participants(
+    participants: &mut Vec<u16>,
+    participants_to_remove: Vec<u16>,
+) -> Result<()> {
     if participants_to_remove.is_empty() || participants.is_empty() {
         return Ok(());
     }
@@ -42,14 +46,13 @@ pub fn updated_expected_start_timestamp(ctx: Context<UpdateEvent>, timestamp: i6
     Ok(())
 }
 
-
 #[cfg(test)]
 mod tests {
     use anchor_lang::error;
-    use crate::instructions::{add_participants, remove_participants};
-    use crate::error::EventError;
-    use crate::state::event::Event;
 
+    use crate::error::EventError;
+    use crate::instructions::{add_participants, remove_participants};
+    use crate::state::event::Event;
 
     // add participants
 

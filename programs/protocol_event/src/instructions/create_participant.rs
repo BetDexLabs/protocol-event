@@ -1,6 +1,6 @@
-use anchor_lang::prelude::*;
 use crate::context::CreateParticipant;
 use crate::state::participant::ParticipantType;
+use anchor_lang::prelude::*;
 
 pub fn create_individual_participant(
     ctx: Context<CreateParticipant>,
@@ -26,7 +26,7 @@ fn initialize_participant(
     ctx: Context<CreateParticipant>,
     code: String,
     name: String,
-    participant_type: ParticipantType
+    participant_type: ParticipantType,
 ) {
     let participant = &mut ctx.accounts.participant;
 
