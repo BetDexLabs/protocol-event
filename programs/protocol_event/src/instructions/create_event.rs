@@ -1,4 +1,4 @@
-use crate::CreateEvent;
+use crate::state::event::Event;
 use anchor_lang::prelude::*;
 
 #[derive(AnchorSerialize, AnchorDeserialize, Debug, Clone, PartialEq)]
@@ -11,14 +11,19 @@ pub struct CreateEventInfo {
     pub actual_end_timestamp: Option<i64>,
 }
 
-pub fn create(ctx: Context<CreateEvent>, event_info: CreateEventInfo) -> Result<()> {
-    let event = &mut ctx.accounts.event;
+pub fn create(
+    event: &mut Event,
+    event_info: CreateEventInfo,
+    authority: Pubkey,
+    payer: Pubkey,
+    category: Pubkey,
+    event_group: Pubkey,
+) -> Result<()> {
+    event.authority = authority;
+    event.payer = payer;
 
-    event.authority = ctx.accounts.authority.key();
-    event.payer = ctx.accounts.authority.key();
-
-    event.category = ctx.accounts.category.key();
-    event.event_group = ctx.accounts.event_group.key();
+    event.category = category;
+    event.event_group = event_group;
 
     event.active = false;
 

@@ -15,16 +15,23 @@ pub mod protocol_event {
     use super::*;
 
     pub fn create_event(ctx: Context<CreateEvent>, event_info: CreateEventInfo) -> Result<()> {
-        instructions::create(ctx, event_info)?;
+        instructions::create(
+            &mut ctx.accounts.event,
+            event_info,
+            ctx.accounts.authority.key(),
+            ctx.accounts.authority.key(),
+            ctx.accounts.category.key(),
+            ctx.accounts.event_group.key(),
+        )?;
         Ok(())
     }
 
     pub fn activate_event(ctx: Context<UpdateEvent>, _slug: String) -> Result<()> {
-        instructions::update_event::update_active_flag(ctx, true)
+        instructions::update_event::update_active_flag(&mut ctx.accounts.event, true)
     }
 
     pub fn deactivate_event(ctx: Context<UpdateEvent>, _slug: String) -> Result<()> {
-        instructions::update_event::update_active_flag(ctx, false)
+        instructions::update_event::update_active_flag(&mut ctx.accounts.event, false)
     }
 
     pub fn update_participants(
@@ -32,7 +39,7 @@ pub mod protocol_event {
         _slug: String,
         participants: Vec<u16>,
     ) -> Result<()> {
-        instructions::update_event::update_participants(ctx, participants)
+        instructions::update_event::update_participants(&mut ctx.accounts.event, participants)
     }
 
     pub fn update_expected_start_timestamp(
@@ -40,13 +47,21 @@ pub mod protocol_event {
         _slug: String,
         updated_timestamp: i64,
     ) -> Result<()> {
-        instructions::update_event::updated_expected_start_timestamp(ctx, updated_timestamp)
+        instructions::update_event::updated_expected_start_timestamp(
+            &mut ctx.accounts.event,
+            updated_timestamp,
+        )
     }
 
     // Grouping management instructions
 
     pub fn create_category(ctx: Context<CreateCategory>, code: String, name: String) -> Result<()> {
-        instructions::create_grouping::create_category(ctx, code, name)
+        instructions::create_grouping::create_category(
+            &mut ctx.accounts.category,
+            code,
+            name,
+            ctx.accounts.payer.key(),
+        )
     }
 
     pub fn create_event_group(
@@ -54,6 +69,12 @@ pub mod protocol_event {
         code: String,
         name: String,
     ) -> Result<()> {
-        instructions::create_grouping::create_event_group(ctx, code, name)
+        instructions::create_grouping::create_event_group(
+            &mut ctx.accounts.event_group,
+            ctx.accounts.category.key(),
+            ctx.accounts.payer.key(),
+            code,
+            name,
+        )
     }
 }
