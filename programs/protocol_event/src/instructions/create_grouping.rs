@@ -1,4 +1,5 @@
-use crate::state::grouping::{Category, EventGroup};
+use crate::state::category::Category;
+use crate::state::event_group::EventGroup;
 use anchor_lang::prelude::*;
 
 pub fn create_category(
