@@ -45,6 +45,20 @@ pub mod protocol_event {
         instructions::update_event::updated_expected_start_timestamp(ctx, updated_timestamp)
     }
 
+    // Grouping management instructions
+
+    pub fn create_category(ctx: Context<CreateCategory>, code: String, name: String) -> Result<()> {
+        instructions::create_grouping::create_category(ctx, code, name)
+    }
+
+    pub fn create_event_group(
+        ctx: Context<CreateEventGroup>,
+        code: String,
+        name: String,
+    ) -> Result<()> {
+        instructions::create_grouping::create_event_group(ctx, code, name)
+    }
+
     // Participant management instructions
 
     pub fn create_individual_participant(
@@ -61,19 +75,5 @@ pub mod protocol_event {
         name: String,
     ) -> Result<()> {
         instructions::create_participant::create_team_participant(ctx, code, name)
-    }
-
-    // Grouping management instructions
-
-    pub fn create_category(ctx: Context<CreateCategory>, code: String, name: String) -> Result<()> {
-        instructions::create_grouping::create_category(ctx, code, name)
-    }
-
-    pub fn create_event_group(
-        ctx: Context<CreateEventGroup>,
-        code: String,
-        name: String,
-    ) -> Result<()> {
-        instructions::create_grouping::create_event_group(ctx, code, name)
     }
 }

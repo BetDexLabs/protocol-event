@@ -30,6 +30,16 @@ export function findEventGroupPda(
   return pda;
 }
 
+export function footballCategoryPda(): PublicKey {
+  const program: anchor.Program = anchor.workspace.ProtocolEvent;
+  return findCategoryPda("FOOTBALL", program);
+}
+
+export function eplEventGroupPda(): PublicKey {
+  const program: anchor.Program = anchor.workspace.ProtocolEvent;
+  return findEventGroupPda(footballCategoryPda(), "EPL", program);
+}
+
 export function findParticipantPda(
   category: PublicKey,
   id: number,
@@ -44,14 +54,4 @@ export function findParticipantPda(
     program.programId,
   );
   return pda;
-}
-
-export function footballCategoryPda(): PublicKey {
-  const program: anchor.Program = anchor.workspace.ProtocolEvent;
-  return findCategoryPda("FOOTBALL", program);
-}
-
-export function eplEventGroupPda(): PublicKey {
-  const program: anchor.Program = anchor.workspace.ProtocolEvent;
-  return findEventGroupPda(footballCategoryPda(), "EPL", program);
 }
