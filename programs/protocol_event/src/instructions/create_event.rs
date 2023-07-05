@@ -1,5 +1,5 @@
-use anchor_lang::prelude::*;
 use crate::CreateEvent;
+use anchor_lang::prelude::*;
 
 #[derive(AnchorSerialize, AnchorDeserialize, Debug, Clone, PartialEq)]
 pub struct CreateEventInfo {
@@ -11,10 +11,7 @@ pub struct CreateEventInfo {
     pub actual_end_timestamp: Option<i64>,
 }
 
-pub fn create(
-    ctx: Context<CreateEvent>,
-    event_info: CreateEventInfo,
-) -> Result<()> {
+pub fn create(ctx: Context<CreateEvent>, event_info: CreateEventInfo) -> Result<()> {
     let event = &mut ctx.accounts.event;
 
     event.authority = ctx.accounts.authority.key();

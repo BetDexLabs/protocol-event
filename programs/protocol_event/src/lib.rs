@@ -5,8 +5,8 @@ pub mod state;
 use anchor_lang::prelude::*;
 
 use crate::context::*;
-use crate::state::event::*;
 use crate::instructions::CreateEventInfo;
+use crate::state::event::*;
 
 declare_id!("5qCutonYoeg1aRK31mv4oQYoKdNFMpPaEtDe9nnNQXXf");
 
@@ -16,25 +16,16 @@ pub mod protocol_event {
 
     // Event management instructions
 
-    pub fn create_event(
-        ctx: Context<CreateEvent>,
-        event_info: CreateEventInfo,
-    ) -> Result<()> {
+    pub fn create_event(ctx: Context<CreateEvent>, event_info: CreateEventInfo) -> Result<()> {
         instructions::create_event::create(ctx, event_info)?;
         Ok(())
     }
 
-    pub fn activate_event(
-        ctx: Context<UpdateEvent>,
-        _slug: String,
-    ) -> Result<()> {
+    pub fn activate_event(ctx: Context<UpdateEvent>, _slug: String) -> Result<()> {
         instructions::update_event::update_active_flag(ctx, true)
     }
 
-    pub fn deactivate_event(
-        ctx: Context<UpdateEvent>,
-        _slug: String,
-    ) -> Result<()> {
+    pub fn deactivate_event(ctx: Context<UpdateEvent>, _slug: String) -> Result<()> {
         instructions::update_event::update_active_flag(ctx, false)
     }
 
@@ -78,8 +69,11 @@ pub mod protocol_event {
         instructions::create_grouping::create_category(ctx, code, name)
     }
 
-    pub fn create_event_group(ctx: Context<CreateEventGroup>, code: String, name: String) -> Result<()> {
+    pub fn create_event_group(
+        ctx: Context<CreateEventGroup>,
+        code: String,
+        name: String,
+    ) -> Result<()> {
         instructions::create_grouping::create_event_group(ctx, code, name)
     }
-
 }

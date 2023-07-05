@@ -1,5 +1,8 @@
+use crate::state::type_size::{
+    option_size, vec_size, BOOL_SIZE, CHAR_SIZE, DISCRIMINATOR_SIZE, I64_SIZE, PUB_KEY_SIZE,
+    U64_SIZE,
+};
 use anchor_lang::prelude::*;
-use crate::state::type_size::{BOOL_SIZE, CHAR_SIZE, DISCRIMINATOR_SIZE, I64_SIZE, option_size, PUB_KEY_SIZE, U64_SIZE, vec_size};
 
 #[account]
 pub struct Event {
@@ -25,13 +28,12 @@ impl Event {
     const MAX_EVENT_NAME_LENGTH: usize = 50;
     const MAX_PARTICIPANTS: usize = 300;
 
-    pub const SIZE: usize =
-        DISCRIMINATOR_SIZE
-            + (PUB_KEY_SIZE * 4)
-            + BOOL_SIZE
-            + vec_size(CHAR_SIZE, Event::MAX_EVENT_SLUG_LENGTH)
-            + vec_size(CHAR_SIZE, Event::MAX_EVENT_NAME_LENGTH)
-            + U64_SIZE
-            + vec_size(U64_SIZE, Event::MAX_PARTICIPANTS)
-            + option_size(I64_SIZE) * 2;
+    pub const SIZE: usize = DISCRIMINATOR_SIZE
+        + (PUB_KEY_SIZE * 4)
+        + BOOL_SIZE
+        + vec_size(CHAR_SIZE, Event::MAX_EVENT_SLUG_LENGTH)
+        + vec_size(CHAR_SIZE, Event::MAX_EVENT_NAME_LENGTH)
+        + U64_SIZE
+        + vec_size(U64_SIZE, Event::MAX_PARTICIPANTS)
+        + option_size(I64_SIZE) * 2;
 }
