@@ -1,10 +1,8 @@
 use anchor_lang::prelude::*;
 use crate::error::EventError;
-use crate::UpdateEvent;
 use crate::state::event::Event;
 
-pub fn update_active_flag(ctx: Context<UpdateEvent>, active: bool) -> Result<()> {
-    let event = &mut ctx.accounts.event;
+pub fn update_active_flag(event: &mut Event, active: bool) -> Result<()> {
     event.active = active;
     Ok(())
 }
@@ -36,9 +34,23 @@ pub fn remove_participants(participants: &mut Vec<u16>, participants_to_remove: 
     Ok(())
 }
 
-pub fn updated_expected_start_timestamp(ctx: Context<UpdateEvent>, timestamp: i64) -> Result<()> {
-    let event = &mut ctx.accounts.event;
+pub fn update_expected_start_timestamp(event: &mut Event, timestamp: i64) -> Result<()> {
     event.expected_start_timestamp = timestamp;
+    Ok(())
+}
+
+pub fn update_actual_start_timestamp(event: &mut Event, timestamp: i64) -> Result<()> {
+    event.actual_start_timestamp = Some(timestamp);
+    Ok(())
+}
+
+pub fn update_actual_end_timestamp(event: &mut Event, timestamp: i64) -> Result<()> {
+    event.actual_end_timestamp = Some(timestamp);
+    Ok(())
+}
+
+pub fn update_name(event: &mut Event, name: String) -> Result<()> {
+    event.name = name;
     Ok(())
 }
 
@@ -46,7 +58,7 @@ pub fn updated_expected_start_timestamp(ctx: Context<UpdateEvent>, timestamp: i6
 #[cfg(test)]
 mod tests {
     use anchor_lang::error;
-    use crate::instructions::{add_participants, remove_participants};
+    use crate::instructions::{add_participants, remove_participants, update_active_flag, update_actual_end_timestamp, update_actual_start_timestamp, update_expected_start_timestamp, update_name};
     use crate::error::EventError;
     use crate::state::event::Event;
 
@@ -117,5 +129,64 @@ mod tests {
         remove_participants(existing_participants, participants_to_remove).unwrap();
 
         assert_eq!(existing_participants, &vec![]);
+    }
+
+    // event update operations
+
+    #[test]
+    fn test_update_active_flag() {
+        let mut event = event();
+
+        assert!(update_active_flag(&mut event, true).is_ok());
+        assert_eq!(event.active, true);
+    }
+
+    #[test]
+    fn test_update_expected_start() {
+        let mut event = event();
+
+        assert!(update_expected_start_timestamp(&mut event, 1).is_ok());
+        assert_eq!(event.expected_start_timestamp, 1);
+    }
+
+    #[test]
+    fn test_update_actual_start() {
+        let mut event = event();
+
+        assert!(update_actual_start_timestamp(&mut event, 1).is_ok());
+        assert_eq!(event.actual_start_timestamp, Some(1));
+    }
+
+    #[test]
+    fn test_update_actual_end() {
+        let mut event = event();
+
+        assert!(update_actual_end_timestamp(&mut event, 1).is_ok());
+        assert_eq!(event.actual_end_timestamp, Some(1));
+    }
+
+    #[test]
+    fn test_update_name() {
+        let mut event = event();
+        let updated_name = "Name Is Updated".to_string();
+
+        assert!(update_name(&mut event, updated_name.clone()).is_ok());
+        assert_eq!(event.name, updated_name);
+    }
+
+    fn event() -> Event {
+        Event {
+            category: Default::default(),
+            event_group: Default::default(),
+            active: false,
+            authority: Default::default(),
+            payer: Default::default(),
+            slug: "".to_string(),
+            name: "".to_string(),
+            participants: vec![],
+            expected_start_timestamp: 0,
+            actual_start_timestamp: None,
+            actual_end_timestamp: None,
+        }
     }
 }

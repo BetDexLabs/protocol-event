@@ -29,14 +29,14 @@ pub mod protocol_event {
         ctx: Context<UpdateEvent>,
         _slug: String,
     ) -> Result<()> {
-        instructions::update_event::update_active_flag(ctx, true)
+        instructions::update_event::update_active_flag(&mut ctx.accounts.event, true)
     }
 
     pub fn deactivate_event(
         ctx: Context<UpdateEvent>,
         _slug: String,
     ) -> Result<()> {
-        instructions::update_event::update_active_flag(ctx, false)
+        instructions::update_event::update_active_flag(&mut ctx.accounts.event, false)
     }
 
     pub fn add_event_participants(
@@ -61,12 +61,36 @@ pub mod protocol_event {
         )
     }
 
-    pub fn update_expected_start_timestamp(
+    pub fn update_event_expected_start_timestamp(
         ctx: Context<UpdateEvent>,
         _slug: String,
         updated_timestamp: i64,
     ) -> Result<()> {
-        instructions::update_event::updated_expected_start_timestamp(ctx, updated_timestamp)
+        instructions::update_event::update_expected_start_timestamp(&mut ctx.accounts.event, updated_timestamp)
+    }
+
+    pub fn update_event_actual_start_timestamp(
+        ctx: Context<UpdateEvent>,
+        _slug: String,
+        updated_timestamp: i64,
+    ) -> Result<()> {
+        instructions::update_event::update_actual_start_timestamp(&mut ctx.accounts.event, updated_timestamp)
+    }
+
+    pub fn update_event_actual_end_timestamp(
+        ctx: Context<UpdateEvent>,
+        _slug: String,
+        updated_timestamp: i64,
+    ) -> Result<()> {
+        instructions::update_event::update_actual_end_timestamp(&mut ctx.accounts.event, updated_timestamp)
+    }
+
+    pub fn update_event_name(
+        ctx: Context<UpdateEvent>,
+        _slug: String,
+        updated_name: String,
+    ) -> Result<()> {
+        instructions::update_event::update_name(&mut ctx.accounts.event, updated_name)
     }
 
     // Participant management instructions
