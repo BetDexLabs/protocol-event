@@ -10,7 +10,6 @@ pub fn create_individual_participant(
     name: String,
     participant_id: u16,
 ) -> Result<()> {
-    validate_participant(&code, &name)?;
     initialize_participant(
         participant,
         category,
@@ -19,9 +18,7 @@ pub fn create_individual_participant(
         name,
         ParticipantType::Individual,
         participant_id,
-    );
-
-    Ok(())
+    )
 }
 
 pub fn create_team_participant(
@@ -32,7 +29,6 @@ pub fn create_team_participant(
     name: String,
     participant_id: u16,
 ) -> Result<()> {
-    validate_participant(&code, &name)?;
     initialize_participant(
         participant,
         category,
@@ -41,9 +37,7 @@ pub fn create_team_participant(
         name,
         ParticipantType::Team,
         participant_id,
-    );
-
-    Ok(())
+    )
 }
 
 fn initialize_participant(
@@ -54,7 +48,9 @@ fn initialize_participant(
     name: String,
     participant_type: ParticipantType,
     participant_id: u16,
-) {
+) -> Result<()> {
+    validate_participant(&code, &name)?;
+
     participant.category = *category;
     participant.payer = *payer;
 
@@ -62,6 +58,8 @@ fn initialize_participant(
     participant.code = code;
     participant.name = name;
     participant.id = participant_id;
+
+    Ok(())
 }
 
 fn validate_participant(code: &String, name: &String) -> Result<()> {
