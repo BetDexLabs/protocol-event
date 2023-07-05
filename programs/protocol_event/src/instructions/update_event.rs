@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+
 use crate::error::EventError;
 use crate::state::event::Event;
 
@@ -24,7 +25,10 @@ pub fn add_participants(participants: &mut Vec<u16>, participants_to_add: Vec<u1
     Ok(())
 }
 
-pub fn remove_participants(participants: &mut Vec<u16>, participants_to_remove: Vec<u16>) -> Result<()> {
+pub fn remove_participants(
+    participants: &mut Vec<u16>,
+    participants_to_remove: Vec<u16>,
+) -> Result<()> {
     if participants_to_remove.is_empty() || participants.is_empty() {
         return Ok(());
     }
@@ -54,14 +58,15 @@ pub fn update_name(event: &mut Event, name: String) -> Result<()> {
     Ok(())
 }
 
-
 #[cfg(test)]
 mod tests {
-    use anchor_lang::error;
-    use crate::instructions::{add_participants, remove_participants, update_active_flag, update_actual_end_timestamp, update_actual_start_timestamp, update_expected_start_timestamp, update_name};
     use crate::error::EventError;
+    use crate::instructions::{
+        add_participants, remove_participants, update_active_flag, update_actual_end_timestamp,
+        update_actual_start_timestamp, update_expected_start_timestamp, update_name,
+    };
     use crate::state::event::Event;
-
+    use anchor_lang::error;
 
     // add participants
 

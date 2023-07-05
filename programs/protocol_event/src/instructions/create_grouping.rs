@@ -1,5 +1,5 @@
-use anchor_lang::prelude::*;
 use crate::context::{CreateCategory, CreateEventGroup};
+use anchor_lang::prelude::*;
 
 pub fn create_category(ctx: Context<CreateCategory>, code: String, name: String) -> Result<()> {
     let category = &mut ctx.accounts.category;
@@ -12,7 +12,11 @@ pub fn create_category(ctx: Context<CreateCategory>, code: String, name: String)
     Ok(())
 }
 
-pub fn create_event_group(ctx: Context<CreateEventGroup>, code: String, name: String) -> Result<()> {
+pub fn create_event_group(
+    ctx: Context<CreateEventGroup>,
+    code: String,
+    name: String,
+) -> Result<()> {
     let event_group = &mut ctx.accounts.event_group;
 
     event_group.category = ctx.accounts.category.key();
