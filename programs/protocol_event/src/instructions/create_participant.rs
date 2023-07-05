@@ -75,3 +75,35 @@ fn validate_participant(code: &String, name: &String) -> Result<()> {
     );
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_validate_participant() {
+        let result = validate_participant(
+            &"MUFC".to_string(),
+            &"Manchester United Football Club".to_string(),
+        );
+        assert!(result.is_ok())
+    }
+
+    #[test]
+    fn test_validate_participant_code_exceeds_limit() {
+        let result = validate_participant(
+            &"012345678".to_string(),
+            &"Manchester United Football Club".to_string(),
+        );
+        assert_eq!(result, Err(error!(EventError::MaxStringLengthExceeded)));
+    }
+
+    #[test]
+    fn test_validate_participant_name_exceeds_limit() {
+        let result = validate_participant(
+            &"MUFC".to_string(),
+            &"012345678901234567890123456789012345678901234567890".to_string(),
+        );
+        assert_eq!(result, Err(error!(EventError::MaxStringLengthExceeded)));
+    }
+}
