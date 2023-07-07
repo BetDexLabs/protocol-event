@@ -56,6 +56,26 @@ export async function addEventParticipants(
     });
 }
 
+export async function removeEventParticipants(
+  eventSlug: string,
+  participants: number[],
+) {
+  const program = anchor.workspace.ProtocolEvent;
+  const eventPk = findEventPda(eventSlug, program as Program);
+
+  await program.methods
+    .removeEventParticipants(eventSlug, participants)
+    .accounts({
+      event: eventPk,
+      authority: program.provider.publicKey,
+    })
+    .rpc()
+    .catch((e) => {
+      console.error(e);
+      throw e;
+    });
+}
+
 export async function createCategory(
   program: Program<ProtocolEvent>,
   code: string,

@@ -18,7 +18,7 @@ pub fn add_participants(participants: &mut Vec<u16>, participants_to_add: Vec<u1
     participants.dedup();
 
     require!(
-        participants.len() < Event::MAX_PARTICIPANTS,
+        participants.len() <= Event::MAX_PARTICIPANTS,
         EventError::MaxParticipantsExceeded
     );
 
