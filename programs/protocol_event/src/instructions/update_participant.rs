@@ -46,14 +46,14 @@ mod tests {
     #[test]
     fn test_update_name() {
         let mut participant = &mut participant();
-        let result = update_code(&mut participant, "new name".to_string());
+        let result = update_name(&mut participant, "new name".to_string());
         assert!(result.is_ok());
-        assert_eq!(participant.code, "new name".to_string());
+        assert_eq!(participant.name, "new name".to_string());
     }
 
     #[test]
     fn test_update_name_name_exceeds_limit() {
-        let result = update_code(
+        let result = update_name(
             &mut participant(),
             "012345678901234567890123456789012345678901234567890".to_string(),
         );
