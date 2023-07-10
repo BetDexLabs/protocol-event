@@ -8,10 +8,21 @@ pub fn update_active_flag(event: &mut Event, active: bool) -> Result<()> {
     Ok(())
 }
 
-pub fn add_participants(participants: &mut Vec<u16>, participants_to_add: Vec<u16>) -> Result<()> {
+pub fn add_participants(
+    participants: &mut Vec<u16>,
+    participants_to_add: Vec<u16>,
+    category_participant_count: u16,
+) -> Result<()> {
     if participants_to_add.is_empty() {
         return Ok(());
     }
+
+    require!(
+        participants_to_add
+            .iter()
+            .all(|&participant| participant > 0 && participant <= category_participant_count),
+        EventError::InvalidEventParticipants,
+    );
 
     participants.extend(participants_to_add.into_iter());
     participants.sort_by(|a, b| a.partial_cmp(b).unwrap());
@@ -58,7 +69,7 @@ mod tests {
         let existing_participants = &mut vec![1, 2, 3, 4];
         let participants_to_add = vec![5, 6, 7, 8];
 
-        add_participants(existing_participants, participants_to_add).unwrap();
+        add_participants(existing_participants, participants_to_add, 10).unwrap();
 
         assert_eq!(existing_participants, &vec![1, 2, 3, 4, 5, 6, 7, 8]);
     }
@@ -68,7 +79,7 @@ mod tests {
         let existing_participants = &mut vec![1, 2, 3, 4];
         let participants_to_add = vec![];
 
-        add_participants(existing_participants, participants_to_add).unwrap();
+        add_participants(existing_participants, participants_to_add, 10).unwrap();
 
         assert_eq!(existing_participants, &vec![1, 2, 3, 4]);
     }
@@ -78,7 +89,7 @@ mod tests {
         let existing_participants = &mut vec![1, 2, 3, 4, 5];
         let participants_to_add = vec![5, 6, 7, 8];
 
-        add_participants(existing_participants, participants_to_add).unwrap();
+        add_participants(existing_participants, participants_to_add, 10).unwrap();
 
         assert_eq!(existing_participants, &vec![1, 2, 3, 4, 5, 6, 7, 8]);
     }
@@ -92,9 +103,19 @@ mod tests {
 
         let participants_to_add = vec![301];
 
-        let result = add_participants(existing_participants, participants_to_add);
+        let result = add_participants(existing_participants, participants_to_add, 500);
 
         assert_eq!(result, Err(error!(EventError::MaxParticipantsExceeded)));
+    }
+
+    #[test]
+    fn test_add_participants_invalid_participant() {
+        let existing_participants = &mut vec![1, 2, 3, 4, 5];
+        let participants_to_add = vec![11];
+
+        let result = add_participants(existing_participants, participants_to_add, 10);
+
+        assert_eq!(result, Err(error!(EventError::InvalidEventParticipants)));
     }
 
     // remove participants

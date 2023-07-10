@@ -41,6 +41,7 @@ describe("Update Event", () => {
       .activateEvent(slug)
       .accounts({
         event: eventPk,
+        category: footballCategoryPda(),
         authority: getAnchorProvider().wallet.publicKey,
       })
       .rpc();
@@ -52,6 +53,7 @@ describe("Update Event", () => {
       .deactivateEvent(slug)
       .accounts({
         event: eventPk,
+        category: footballCategoryPda(),
         authority: getAnchorProvider().wallet.publicKey,
       })
       .rpc();

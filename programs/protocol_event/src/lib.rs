@@ -46,6 +46,7 @@ pub mod protocol_event {
         instructions::update_event::add_participants(
             &mut ctx.accounts.event.participants,
             participants_to_add,
+            ctx.accounts.category.participant_count,
         )
     }
 

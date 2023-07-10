@@ -7,6 +7,7 @@ import {
   findEventGroupPda,
   findEventPda,
   findParticipantPda,
+  footballCategoryPda,
 } from "./pda";
 import { PublicKey } from "@solana/web3.js";
 
@@ -47,6 +48,7 @@ export async function addEventParticipants(
     .addEventParticipants(eventSlug, participants)
     .accounts({
       event: eventPk,
+      category: footballCategoryPda(),
       authority: program.provider.publicKey,
     })
     .rpc()
@@ -67,6 +69,7 @@ export async function removeEventParticipants(
     .removeEventParticipants(eventSlug, participants)
     .accounts({
       event: eventPk,
+      category: footballCategoryPda(),
       authority: program.provider.publicKey,
     })
     .rpc()
