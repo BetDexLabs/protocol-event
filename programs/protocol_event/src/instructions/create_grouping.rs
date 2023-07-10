@@ -12,6 +12,7 @@ pub fn create_category(
     validate_category(&code, &name)?;
 
     category.payer = payer;
+    category.authority = payer;
     category.code = code;
     category.name = name;
     category.participant_count = 0;
@@ -76,6 +77,7 @@ mod tests {
             code: "".to_string(),
             name: "".to_string(),
             participant_count: 0,
+            authority: Default::default(),
             payer: Default::default(),
         };
 
@@ -87,6 +89,7 @@ mod tests {
 
         assert!(result.is_ok());
         assert_eq!(new_category.payer, payer);
+        assert_eq!(new_category.authority, payer);
         assert_eq!(new_category.code, code);
         assert_eq!(new_category.name, name);
         assert_eq!(new_category.participant_count, 0);
@@ -115,6 +118,7 @@ mod tests {
             category: Default::default(),
             code: "".to_string(),
             name: "".to_string(),
+            authority: Default::default(),
             payer: Default::default(),
         };
 
@@ -134,6 +138,7 @@ mod tests {
         assert!(result.is_ok());
         assert_eq!(new_event_group.category, category);
         assert_eq!(new_event_group.payer, payer);
+        assert_eq!(new_event_group.authority, payer);
         assert_eq!(new_event_group.code, code);
         assert_eq!(new_event_group.name, name);
     }
