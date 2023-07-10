@@ -117,3 +117,11 @@ pub struct CreateParticipant<'info> {
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
 }
+
+#[derive(Accounts)]
+pub struct UpdateParticipant<'info> {
+    #[account(mut, has_one = authority)]
+    pub participant: Account<'info, Participant>,
+    #[account(mut)]
+    pub authority: Signer<'info>,
+}
