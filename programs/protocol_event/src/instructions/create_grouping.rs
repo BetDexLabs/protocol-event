@@ -43,6 +43,7 @@ pub fn create_event_group(
 
     event_group.category = category;
     event_group.payer = payer;
+    event_group.authority = payer;
     event_group.code = code;
     event_group.name = name;
 

@@ -134,12 +134,15 @@ pub mod protocol_event {
         )
     }
 
-    // pub fn update_event_group_name(ctx: Context<UpdateEventGroup>, updated_name: String) -> Result<()> {
-    //     instructions::update_grouping::update_category_name(
-    //         &mut ctx.accounts.event_group,
-    //         updated_name,
-    //     )
-    // }
+    pub fn update_event_group_name(
+        ctx: Context<UpdateEventGroup>,
+        updated_name: String,
+    ) -> Result<()> {
+        instructions::update_grouping::update_event_group_name(
+            &mut ctx.accounts.event_group,
+            updated_name,
+        )
+    }
 
     // Participant management instructions
 
