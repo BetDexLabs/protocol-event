@@ -47,7 +47,6 @@ pub struct UpdateEvent<'info> {
     pub event: Account<'info, Event>,
     pub category: Account<'info, Category>,
 
-    #[account(mut)]
     pub authority: Signer<'info>,
 }
 
@@ -122,6 +121,5 @@ pub struct CreateParticipant<'info> {
 pub struct UpdateParticipant<'info> {
     #[account(mut, has_one = authority)]
     pub participant: Account<'info, Participant>,
-    #[account(mut)]
     pub authority: Signer<'info>,
 }
