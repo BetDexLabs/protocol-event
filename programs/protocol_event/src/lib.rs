@@ -195,4 +195,12 @@ pub mod protocol_event {
     ) -> Result<()> {
         instructions::update_participant::update_code(&mut ctx.accounts.participant, updated_code)
     }
+
+    pub fn activate_participant(ctx: Context<UpdateParticipant>) -> Result<()> {
+        instructions::update_participant::activate_participant(&mut ctx.accounts.participant)
+    }
+
+    pub fn deactivate_participant(ctx: Context<UpdateParticipant>) -> Result<()> {
+        instructions::update_participant::deactivate_participant(&mut ctx.accounts.participant)
+    }
 }
