@@ -3,85 +3,128 @@ import {
   createEvent,
   createEventGroup,
   createIndividualParticipant,
-  createTeamParticipant, createWalletWithBalance
+  createTeamParticipant,
+  createWalletWithBalance,
 } from "./util/test_util";
 import * as anchor from "@coral-xyz/anchor";
 import { BN, Program } from "@coral-xyz/anchor";
 import { ProtocolEvent } from "../target/types/protocol_event";
 import assert from "assert";
-import console from "console";
 
 describe("Close Accounts", () => {
   it("Success", async () => {
-    const console = require("console");
-
-    const program = anchor.workspace
-      .ProtocolEvent as Program<ProtocolEvent>;
-
+    const program = anchor.workspace.ProtocolEvent as Program<ProtocolEvent>;
 
     const payer = await createWalletWithBalance();
-    const startingBalance = await program.provider.connection.getBalance(payer.publicKey);
 
-    const categoryPk = await createCategory(program, "CLOSE", "To Close", payer);
-    const eventGroupPk = await createEventGroup(program, categoryPk, "CLOSE", "To Close", payer);
-    const individualPk = await createIndividualParticipant(program, categoryPk, "CLOSE", "To Close", payer);
-    const teamPk = await createTeamParticipant(program, categoryPk, "CLOSE", "To Close", payer);
-    const eventPk = await createEvent({
+    const categoryPk = await createCategory(
+      program,
+      "CLOSE",
+      "To Close",
+      payer,
+    );
+    const eventGroupPk = await createEventGroup(
+      program,
+      categoryPk,
+      "CLOSE",
+      "To Close",
+      payer,
+    );
+    const individualPk = await createIndividualParticipant(
+      program,
+      categoryPk,
+      "CLOSE",
+      "To Close",
+      payer,
+    );
+    const teamPk = await createTeamParticipant(
+      program,
+      categoryPk,
+      "CLOSE",
+      "To Close",
+      payer,
+    );
+    const eventPk = await createEvent(
+      {
         code: "CLOSE",
         name: "TO CLOSE",
         participants: [],
         actualEndTimestamp: null,
         actualStartTimestamp: null,
-        expectedStartTimestamp: new BN(1689169672)
+        expectedStartTimestamp: new BN(1689169672),
       },
       categoryPk,
       eventGroupPk,
-      payer
+      payer,
     );
 
-    await program.methods.closeCategory()
+    await program.methods
+      .closeCategory()
       .accounts({
         category: categoryPk,
         authority: payer.publicKey,
-        payer: payer.publicKey
+        payer: payer.publicKey,
       })
       .signers([payer])
       .rpc();
+    await assertAccountClosed(program.account.category.fetch(categoryPk));
 
-    await program.methods.closeEventGroup()
+    await program.methods
+      .closeEventGroup()
       .accounts({
         eventGroup: eventGroupPk,
         authority: payer.publicKey,
-        payer: payer.publicKey
+        payer: payer.publicKey,
       })
       .signers([payer])
       .rpc();
+    await assertAccountClosed(program.account.eventGroup.fetch(eventGroupPk));
 
-    console.log((await program.account.participant.fetch(individualPk)).payer.toBase58())
-    await program.methods.closeParticipant()
+    await program.methods
+      .closeParticipant()
       .accounts({
         participant: individualPk,
         authority: payer.publicKey,
-        payer: payer.publicKey
+        payer: payer.publicKey,
       })
       .signers([payer])
-      .rpc()
-      .catch((e) => console.log(e));
-    console.log(1)
+      .rpc();
+    await assertAccountClosed(program.account.participant.fetch(individualPk));
 
-    console.log((await program.account.participant.fetch(teamPk)).payer.toBase58())
-    await program.methods.closeParticipant()
+    await program.methods
+      .closeParticipant()
       .accounts({
         participant: teamPk,
         authority: payer.publicKey,
-        payer: payer.publicKey
+        payer: payer.publicKey,
       })
       .signers([payer])
-      .rpc()
-      .catch((e) => console.log(e));
-    console.log(2)
+      .rpc();
+    await assertAccountClosed(program.account.participant.fetch(teamPk));
 
-    const closingBalance = await program.provider.connection.getBalance(payer.publicKey);
-    assert.equal(startingBalance, closingBalance);
+    await program.methods
+      .closeEvent()
+      .accounts({
+        event: eventPk,
+        authority: payer.publicKey,
+        payer: payer.publicKey,
+      })
+      .signers([payer])
+      .rpc();
+    await assertAccountClosed(program.account.event.fetch(eventPk));
+
+    const closingBalance = await program.provider.connection.getBalance(
+      payer.publicKey,
+    );
+    assert.equal(closingBalance, 1000000000);
   });
 });
+
+async function assertAccountClosed(promise: Promise<any>) {
+  try {
+    await promise;
+    assert.fail("Account should not exist");
+  } catch (e) {
+    assert.ok(e.message.startsWith("Account does not exist or has no data"));
+  }
+}
