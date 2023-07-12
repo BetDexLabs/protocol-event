@@ -5,6 +5,7 @@ use anchor_lang::prelude::*;
 
 #[account]
 pub struct Participant {
+    pub authority: Pubkey,
     pub category: Pubkey,
     pub participant_type: ParticipantType,
     pub active: bool,
@@ -13,7 +14,6 @@ pub struct Participant {
     pub code: String,
     pub id: u16,
 
-    pub authority: Pubkey,
     pub payer: Pubkey,
 }
 

@@ -6,11 +6,11 @@ use anchor_lang::prelude::*;
 
 #[account]
 pub struct Event {
+    pub authority: Pubkey,
     pub category: Pubkey,
     pub event_group: Pubkey,
     pub active: bool,
 
-    pub authority: Pubkey,
     pub payer: Pubkey,
 
     pub code: String, // event identifier e.g. LAFCvLAG@2021-08-28
