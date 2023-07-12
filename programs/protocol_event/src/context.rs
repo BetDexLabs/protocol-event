@@ -14,7 +14,7 @@ pub struct CreateEvent<'info> {
         payer = authority,
         seeds = [
             b"event".as_ref(),
-            event_info.slug.as_ref()
+            event_info.code.as_ref()
         ],
         bump,
         space = Event::SIZE
@@ -32,13 +32,13 @@ pub struct CreateEvent<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(_slug: String)]
+#[instruction(_code: String)]
 pub struct UpdateEvent<'info> {
     #[account(
         mut,
         seeds = [
             b"event".as_ref(),
-            _slug.as_ref()
+            _code.as_ref()
         ],
         bump,
         has_one = authority,

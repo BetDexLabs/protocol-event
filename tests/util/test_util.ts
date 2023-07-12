@@ -19,7 +19,7 @@ export async function createEventAccount(
   eventGroupPk: PublicKey,
 ) {
   const program = anchor.workspace.ProtocolEvent;
-  const eventPk = findEventPda(createEventInfo.slug, program as Program);
+  const eventPk = findEventPda(createEventInfo.code, program as Program);
   await program.methods
     .createEvent(createEventInfo)
     .accounts({
@@ -38,14 +38,14 @@ export async function createEventAccount(
 }
 
 export async function addEventParticipants(
-  eventSlug: string,
+  eventCode: string,
   participants: number[],
 ) {
   const program = anchor.workspace.ProtocolEvent;
-  const eventPk = findEventPda(eventSlug, program as Program);
+  const eventPk = findEventPda(eventCode, program as Program);
 
   await program.methods
-    .addEventParticipants(eventSlug, participants)
+    .addEventParticipants(eventCode, participants)
     .accounts({
       event: eventPk,
       category: footballCategoryPda(),
@@ -59,14 +59,14 @@ export async function addEventParticipants(
 }
 
 export async function removeEventParticipants(
-  eventSlug: string,
+  eventCode: string,
   participants: number[],
 ) {
   const program = anchor.workspace.ProtocolEvent;
-  const eventPk = findEventPda(eventSlug, program as Program);
+  const eventPk = findEventPda(eventCode, program as Program);
 
   await program.methods
-    .removeEventParticipants(eventSlug, participants)
+    .removeEventParticipants(eventCode, participants)
     .accounts({
       event: eventPk,
       category: footballCategoryPda(),
