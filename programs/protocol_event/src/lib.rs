@@ -30,17 +30,17 @@ pub mod protocol_event {
         Ok(())
     }
 
-    pub fn activate_event(ctx: Context<UpdateEvent>, _slug: String) -> Result<()> {
+    pub fn activate_event(ctx: Context<UpdateEvent>, _code: String) -> Result<()> {
         instructions::update_event::update_active_flag(&mut ctx.accounts.event, true)
     }
 
-    pub fn deactivate_event(ctx: Context<UpdateEvent>, _slug: String) -> Result<()> {
+    pub fn deactivate_event(ctx: Context<UpdateEvent>, _code: String) -> Result<()> {
         instructions::update_event::update_active_flag(&mut ctx.accounts.event, false)
     }
 
     pub fn add_event_participants(
         ctx: Context<UpdateEvent>,
-        _slug: String,
+        _code: String,
         participants_to_add: Vec<u16>,
     ) -> Result<()> {
         instructions::update_event::add_participants(
@@ -52,7 +52,7 @@ pub mod protocol_event {
 
     pub fn remove_event_participants(
         ctx: Context<UpdateEvent>,
-        _slug: String,
+        _code: String,
         participants_to_remove: Vec<u16>,
     ) -> Result<()> {
         instructions::update_event::remove_participants(
@@ -63,7 +63,7 @@ pub mod protocol_event {
 
     pub fn update_event_expected_start_timestamp(
         ctx: Context<UpdateEvent>,
-        _slug: String,
+        _code: String,
         updated_timestamp: i64,
     ) -> Result<()> {
         instructions::update_event::update_expected_start_timestamp(
@@ -74,7 +74,7 @@ pub mod protocol_event {
 
     pub fn update_event_actual_start_timestamp(
         ctx: Context<UpdateEvent>,
-        _slug: String,
+        _code: String,
         updated_timestamp: i64,
     ) -> Result<()> {
         instructions::update_event::update_actual_start_timestamp(
@@ -85,7 +85,7 @@ pub mod protocol_event {
 
     pub fn update_event_actual_end_timestamp(
         ctx: Context<UpdateEvent>,
-        _slug: String,
+        _code: String,
         updated_timestamp: i64,
     ) -> Result<()> {
         instructions::update_event::update_actual_end_timestamp(
@@ -96,7 +96,7 @@ pub mod protocol_event {
 
     pub fn update_event_name(
         ctx: Context<UpdateEvent>,
-        _slug: String,
+        _code: String,
         updated_name: String,
     ) -> Result<()> {
         instructions::update_event::update_name(&mut ctx.accounts.event, updated_name)
