@@ -2,11 +2,14 @@ import {
   createCategory,
   createIndividualParticipant,
   createTeamParticipant,
+  createWalletWithBalance,
 } from "../util/test_util";
 import * as anchor from "@coral-xyz/anchor";
-import { footballCategoryPda } from "../util/pda";
+import { Program } from "@coral-xyz/anchor";
+import { findParticipantPda, footballCategoryPda } from "../util/pda";
 import assert from "assert";
 import { getAnchorProvider } from "../../admin/util";
+import { SystemProgram } from "@solana/web3.js";
 
 describe("Create Participants", () => {
   it("Create Individual Participant - Success", async () => {
@@ -107,5 +110,38 @@ describe("Create Participants", () => {
 
     const category = await program.account.category.fetch(categoryPk);
     assert.equal(3, category.participantCount);
+  });
+
+  it("Create Participant - Category authority does not match", async () => {
+    const program = anchor.workspace.ProtocolEvent;
+
+    const categoryPk = footballCategoryPda();
+    const category = await program.account.category.fetch(categoryPk);
+    const participantPk = findParticipantPda(
+      categoryPk,
+      category.participantCount,
+      program as Program,
+    );
+
+    const incorrectAuthority = await createWalletWithBalance();
+
+    await program.methods
+      .createIndividualParticipant("Test", "Tester")
+      .accounts({
+        participant: participantPk,
+        category: categoryPk,
+        authority: incorrectAuthority.publicKey,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([incorrectAuthority])
+      .rpc()
+      .then(
+        function (_) {
+          assert.fail("Expected AuthorityMismatch error");
+        },
+        function (err: anchor.AnchorError) {
+          assert.equal(err.error.errorCode.code, "AuthorityMismatch");
+        },
+      );
   });
 });

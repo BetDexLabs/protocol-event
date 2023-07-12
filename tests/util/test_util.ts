@@ -9,7 +9,8 @@ import {
   findParticipantPda,
   footballCategoryPda,
 } from "./pda";
-import { PublicKey } from "@solana/web3.js";
+import { Keypair, PublicKey } from "@solana/web3.js";
+import { getAnchorProvider } from "../../admin/util";
 
 const { SystemProgram } = anchor.web3;
 
@@ -141,7 +142,7 @@ export async function createIndividualParticipant(
     .accounts({
       participant: participantPk,
       category: categoryPk,
-      payer: program.provider.publicKey,
+      authority: program.provider.publicKey,
       systemProgram: SystemProgram.programId,
     })
     .rpc()
@@ -169,7 +170,7 @@ export async function createTeamParticipant(
     .accounts({
       participant: participantPk,
       category: categoryPk,
-      payer: program.provider.publicKey,
+      authority: program.provider.publicKey,
       systemProgram: SystemProgram.programId,
     })
     .rpc()
@@ -178,4 +179,13 @@ export async function createTeamParticipant(
       throw e;
     });
   return participantPk;
+}
+
+export async function createWalletWithBalance(lamportBalance = 1000000000) {
+  const payer = Keypair.generate();
+  const provider = getAnchorProvider();
+  await provider.connection.confirmTransaction(
+    await provider.connection.requestAirdrop(payer.publicKey, lamportBalance),
+  );
+  return payer;
 }
