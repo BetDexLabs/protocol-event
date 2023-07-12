@@ -14,10 +14,11 @@ import { getAnchorProvider } from "../../admin/util";
 
 const { SystemProgram } = anchor.web3;
 
-export async function createEventAccount(
+export async function createEvent(
   createEventInfo: CreateEventInfo,
   categoryPk: PublicKey,
   eventGroupPk: PublicKey,
+  signer?: Keypair,
 ) {
   const program = anchor.workspace.ProtocolEvent;
   const eventPk = findEventPda(createEventInfo.code, program as Program);
@@ -27,9 +28,10 @@ export async function createEventAccount(
       event: eventPk,
       category: categoryPk,
       eventGroup: eventGroupPk,
-      authority: program.provider.publicKey,
+      authority: signer ? signer.publicKey : program.provider.publicKey,
       systemProgram: SystemProgram.programId,
     })
+    .signers(signer ? [signer] : [])
     .rpc()
     .catch((e) => {
       console.error(e);
@@ -84,15 +86,17 @@ export async function createCategory(
   program: Program<ProtocolEvent>,
   code: string,
   name: string,
+  signer?: Keypair,
 ) {
   const categoryPk = findCategoryPda(code, program as Program);
   await program.methods
     .createCategory(code, name)
     .accounts({
       category: categoryPk,
-      payer: program.provider.publicKey,
+      payer: signer ? signer.publicKey : program.provider.publicKey,
       systemProgram: SystemProgram.programId,
     })
+    .signers(signer ? [signer] : [])
     .rpc()
     .catch((e) => {
       console.error(e);
@@ -106,6 +110,7 @@ export async function createEventGroup(
   categoryPk: PublicKey,
   code: string,
   name: string,
+  signer?: Keypair,
 ) {
   const eventGroupPk = findEventGroupPda(categoryPk, code, program as Program);
   await program.methods
@@ -113,9 +118,10 @@ export async function createEventGroup(
     .accounts({
       eventGroup: eventGroupPk,
       category: categoryPk,
-      payer: program.provider.publicKey,
+      payer: signer ? signer.publicKey : program.provider.publicKey,
       systemProgram: SystemProgram.programId,
     })
+    .signers(signer ? [signer] : [])
     .rpc()
     .catch((e) => {
       console.error(e);
@@ -129,6 +135,7 @@ export async function createIndividualParticipant(
   categoryPk: PublicKey,
   code: string,
   name: string,
+  signer?: Keypair,
 ) {
   const category = await program.account.category.fetch(categoryPk);
 
@@ -142,9 +149,10 @@ export async function createIndividualParticipant(
     .accounts({
       participant: participantPk,
       category: categoryPk,
-      authority: program.provider.publicKey,
+      authority: signer ? signer.publicKey : program.provider.publicKey,
       systemProgram: SystemProgram.programId,
     })
+    .signers(signer ? [signer] : [])
     .rpc()
     .catch((e) => {
       console.error(e);
@@ -158,6 +166,7 @@ export async function createTeamParticipant(
   categoryPk: PublicKey,
   code: string,
   name: string,
+  signer?: Keypair,
 ) {
   const category = await program.account.category.fetch(categoryPk);
   const participantPk = findParticipantPda(
@@ -170,9 +179,10 @@ export async function createTeamParticipant(
     .accounts({
       participant: participantPk,
       category: categoryPk,
-      authority: program.provider.publicKey,
+      authority: signer ? signer.publicKey : program.provider.publicKey,
       systemProgram: SystemProgram.programId,
     })
+    .signers(signer ? [signer] : [])
     .rpc()
     .catch((e) => {
       console.error(e);

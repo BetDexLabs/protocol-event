@@ -141,3 +141,57 @@ pub struct UpdateParticipant<'info> {
     pub participant: Account<'info, Participant>,
     pub authority: Signer<'info>,
 }
+
+// close accounts
+
+#[derive(Accounts)]
+pub struct CloseEvent<'info> {
+    #[account(
+        mut,
+        has_one = authority,
+        close = payer,
+    )]
+    pub event: Account<'info, Event>,
+    pub authority: Signer<'info>,
+    #[account(mut)]
+    pub payer: SystemAccount<'info>,
+}
+
+#[derive(Accounts)]
+pub struct CloseCategory<'info> {
+    #[account(
+        mut,
+        has_one = authority,
+        close = payer,
+    )]
+    pub category: Account<'info, Category>,
+    pub authority: Signer<'info>,
+    #[account(mut)]
+    pub payer: SystemAccount<'info>,
+}
+
+#[derive(Accounts)]
+pub struct CloseEventGroup<'info> {
+    #[account(
+        mut,
+        has_one = authority,
+        close = payer,
+    )]
+    pub event_group: Account<'info, EventGroup>,
+    pub authority: Signer<'info>,
+    #[account(mut)]
+    pub payer: SystemAccount<'info>,
+}
+
+#[derive(Accounts)]
+pub struct CloseParticipant<'info> {
+    #[account(
+        mut,
+        has_one = authority,
+        close = payer,
+    )]
+    pub participant: Account<'info, Participant>,
+    pub authority: Signer<'info>,
+    #[account(mut)]
+    pub payer: SystemAccount<'info>,
+}
