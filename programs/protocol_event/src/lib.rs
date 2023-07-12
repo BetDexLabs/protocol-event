@@ -9,7 +9,7 @@ pub mod error;
 pub mod instructions;
 pub mod state;
 
-declare_id!("5qCutonYoeg1aRK31mv4oQYoKdNFMpPaEtDe9nnNQXXf");
+declare_id!("mpeq1VkcGKDWS7ELiQJ2diRPX9vHQb27FruqcoxhPqF");
 
 #[program]
 pub mod protocol_event {
