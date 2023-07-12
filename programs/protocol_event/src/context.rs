@@ -1,3 +1,4 @@
+use crate::error::EventError;
 use crate::instructions::CreateEventInfo;
 use crate::state::category::Category;
 use crate::state::event_group::EventGroup;
@@ -112,7 +113,7 @@ pub struct UpdateEventGroup<'info> {
 pub struct CreateParticipant<'info> {
     #[account(
         init,
-        payer = payer,
+        payer = authority,
         seeds = [
             b"participant".as_ref(),
             category.key().as_ref(),
@@ -122,11 +123,14 @@ pub struct CreateParticipant<'info> {
         space = Participant::SIZE
     )]
     pub participant: Account<'info, Participant>,
-    #[account(mut)]
+    #[account(
+        mut,
+        has_one = authority @ EventError::AuthorityMismatch,
+    )]
     pub category: Account<'info, Category>,
 
     #[account(mut)]
-    pub payer: Signer<'info>,
+    pub authority: Signer<'info>,
     #[account(address = system_program::ID)]
     pub system_program: Program<'info, System>,
 }

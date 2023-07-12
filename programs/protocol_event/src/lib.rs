@@ -157,7 +157,7 @@ pub mod protocol_event {
         instructions::create_participant::create_individual_participant(
             &mut ctx.accounts.participant,
             &ctx.accounts.category.key(),
-            &ctx.accounts.payer.key(),
+            &ctx.accounts.authority.key(),
             code,
             name,
             ctx.accounts.category.participant_count,
@@ -175,7 +175,7 @@ pub mod protocol_event {
         instructions::create_participant::create_team_participant(
             &mut ctx.accounts.participant,
             &ctx.accounts.category.key(),
-            &ctx.accounts.payer.key(),
+            &ctx.accounts.authority.key(),
             code,
             name,
             ctx.accounts.category.participant_count,
