@@ -33,6 +33,7 @@ describe("Create Participants", () => {
     );
     assert.equal(code, individual.code);
     assert.equal(name, individual.name);
+    assert.equal(true, individual.active);
   });
 
   it("Create Team Participant - Success", async () => {
@@ -56,6 +57,7 @@ describe("Create Participants", () => {
     );
     assert.equal(code, team.code);
     assert.equal(name, team.name);
+    assert.equal(true, team.active);
   });
 
   it("Create Multiple Participants - Category participant count and id increments", async () => {
