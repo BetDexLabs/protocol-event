@@ -203,4 +203,22 @@ pub mod protocol_event {
     pub fn deactivate_participant(ctx: Context<UpdateParticipant>) -> Result<()> {
         instructions::update_participant::deactivate_participant(&mut ctx.accounts.participant)
     }
+
+    // close accounts
+
+    pub fn close_event(_ctx: Context<CloseEvent>) -> Result<()> {
+        Ok(())
+    }
+
+    pub fn close_event_group(_ctx: Context<CloseEventGroup>) -> Result<()> {
+        Ok(())
+    }
+
+    pub fn close_category(_ctx: Context<CloseCategory>) -> Result<()> {
+        Ok(())
+    }
+
+    pub fn close_participant(_ctx: Context<CloseParticipant>) -> Result<()> {
+        Ok(())
+    }
 }

@@ -3,7 +3,7 @@ import { Program } from "@coral-xyz/anchor";
 import assert from "assert";
 import {
   addEventParticipants,
-  createEventAccount,
+  createEvent,
   removeEventParticipants,
 } from "../util/test_util";
 import { CreateEventInfo } from "../util/constants";
@@ -29,7 +29,7 @@ describe("Create Event", () => {
       actualEndTimestamp: null,
     } as CreateEventInfo;
 
-    await createEventAccount(
+    await createEvent(
       createEventInfo,
       footballCategoryPda(),
       eplEventGroupPda(),

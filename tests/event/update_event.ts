@@ -1,7 +1,7 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import assert from "assert";
-import { createEventAccount } from "../util/test_util";
+import { createEvent } from "../util/test_util";
 import { ProtocolEvent } from "../../target/types/protocol_event";
 import { CreateEventInfo } from "../util/constants";
 import {
@@ -28,7 +28,7 @@ describe("Update Event", () => {
       actualStartTimestamp: null,
       actualEndTimestamp: null,
     } as CreateEventInfo;
-    await createEventAccount(
+    await createEvent(
       createEventInfo,
       footballCategoryPda(),
       eplEventGroupPda(),
