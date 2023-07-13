@@ -1,5 +1,5 @@
 module.exports = {
-    verbose: true,
+    verbose: false,
     testMatch: ["**/tests/**/*.ts?(x)"],
     testPathIgnorePatterns: [ "tests/setup.ts", "tests/util/*"],
     globalSetup: "<rootDir>/tests/setup.ts",

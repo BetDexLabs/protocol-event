@@ -149,6 +149,7 @@ pub struct CloseEvent<'info> {
     #[account(
         mut,
         has_one = authority,
+        has_one = payer,
         close = payer,
     )]
     pub event: Account<'info, Event>,
@@ -162,6 +163,7 @@ pub struct CloseCategory<'info> {
     #[account(
         mut,
         has_one = authority,
+        has_one = payer,
         close = payer,
     )]
     pub category: Account<'info, Category>,
@@ -175,6 +177,7 @@ pub struct CloseEventGroup<'info> {
     #[account(
         mut,
         has_one = authority,
+        has_one = payer,
         close = payer,
     )]
     pub event_group: Account<'info, EventGroup>,
@@ -188,6 +191,7 @@ pub struct CloseParticipant<'info> {
     #[account(
         mut,
         has_one = authority,
+        has_one = payer,
         close = payer,
     )]
     pub participant: Account<'info, Participant>,
