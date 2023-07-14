@@ -1,8 +1,129 @@
-import { MemcmpFilter, PublicKey } from "@solana/web3.js";
+import { Connection, MemcmpFilter, PublicKey } from "@solana/web3.js";
 import bs58 from "bs58";
 import { Event } from "../accounts";
+import { PROGRAM_ID } from "../programId";
 
 export const GET_MULTIPLE_ACCOUNTS_LIMIT = 99;
+
+interface QueryableAccountClass {
+  discriminator: Buffer;
+  fetchMultiple(
+    c: Connection,
+    addresses: PublicKey[],
+  ): Promise<Array<Event | null>>;
+  fetch(
+    c: Connection,
+    address: PublicKey,
+  ): Promise<Event | null>;
+}
+
+export abstract class AccountQuery {
+  private readonly connection: Connection;
+  private accountClass: QueryableAccountClass;
+  protected filters: Map<string, Criterion<unknown>>;
+
+  protected constructor(connection: Connection, accountClass: QueryableAccountClass, filters: Map<string, Criterion<unknown>>) {
+    this.connection = connection;
+    this.accountClass = accountClass;
+    this.filters = filters;
+  }
+
+  /**
+   *
+   * @returns: list of all fetched publicKeys
+   */
+  public async fetchPublicKeys() {
+    try {
+      const accounts = await this.connection.getProgramAccounts(
+        PROGRAM_ID,
+        {
+          dataSlice: { offset: 0, length: 0 }, // fetch without any data.
+          filters: this.toFilters(...this.filters.values())
+        }
+      );
+      return accounts.map((account) => account.pubkey);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  /**
+   *
+   * @returns fetched accounts mapped to their publicKey
+   */
+  public async fetch() {
+    const publicKeys = await this.fetchPublicKeys();
+
+    let accounts = [];
+
+    try {
+      if (publicKeys.length <= GET_MULTIPLE_ACCOUNTS_LIMIT) {
+        accounts = await this.accountClass.fetchMultiple(this.connection, publicKeys);
+      } else {
+        for (let i = 0; i < publicKeys.length; i += GET_MULTIPLE_ACCOUNTS_LIMIT) {
+          const accountsChunk = await this.accountClass.fetchMultiple(this.connection, publicKeys.slice(i, i + GET_MULTIPLE_ACCOUNTS_LIMIT));
+          accounts = accounts.concat(accountsChunk);
+        }
+      }
+
+      return publicKeys
+        .map((publicKey, i) => {
+          return { publicKey: publicKey, account: accounts[i] };
+        })
+        .filter((o) => o.account);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  toFilters(
+    ...criteria: Criterion<unknown>[]
+  ): MemcmpFilter[] {
+    const filters: MemcmpFilter[] = [];
+
+    const criteriaSize = criteria
+      .map((criterion) => criterion.getSize())
+      .reduce((partialSum, a) => partialSum + a, 0);
+    const buffer = Buffer.alloc(8 + criteriaSize);
+
+    let filterIndex = 0;
+    let filterLength = 0;
+    this.accountClass.discriminator.copy(buffer, 0, 0, 8);
+    filterLength = filterLength + 8;
+
+    criteria.forEach((criterion) => {
+      if (criterion.hasValue()) {
+        filterLength += criterion.writeToBuffer(buffer);
+      } else {
+        if (filterLength > 0) {
+          filters.push(this.toFilter(buffer, filterIndex, filterIndex + filterLength));
+        }
+        filterIndex = filterIndex + filterLength + criterion.getSize();
+        filterLength = 0;
+      }
+    });
+    if (filterLength > 0) {
+      filters.push(this.toFilter(buffer, filterIndex, filterIndex + filterLength));
+    }
+
+    return filters;
+  }
+
+  toFilter(
+    buffer: Buffer,
+    startIndex: number,
+    endIndex: number,
+  ): MemcmpFilter {
+    return {
+      memcmp: {
+        offset: startIndex,
+        bytes: bs58.encode(buffer.subarray(startIndex, endIndex)),
+      },
+    };
+  }
+}
 
 abstract class Criterion<T> {
   private offset: number;
@@ -107,53 +228,4 @@ export class PublicKeyCriterion extends Criterion<PublicKey> {
     const value = this.getValue();
     return value == undefined ? Uint8Array.of() : value.toBytes();
   }
-}
-
-export function toFilters(
-  accountName: string,
-  ...criteria: Criterion<unknown>[]
-): MemcmpFilter[] {
-  const filters: MemcmpFilter[] = [];
-
-  const criteriaSize = criteria
-    .map((criterion) => criterion.getSize())
-    .reduce((partialSum, a) => partialSum + a, 0);
-  const buffer = Buffer.alloc(8 + criteriaSize);
-
-  let filterIndex = 0;
-  let filterLength = 0;
-  // Event.discriminator
-  Event.discriminator.copy(buffer, 0, 0, 8);
-  // accountDiscriminator(accountName).copy(buffer, 0, 0, 8);
-  filterLength = filterLength + 8;
-
-  criteria.forEach((criterion) => {
-    if (criterion.hasValue()) {
-      filterLength += criterion.writeToBuffer(buffer);
-    } else {
-      if (filterLength > 0) {
-        filters.push(toFilter(buffer, filterIndex, filterIndex + filterLength));
-      }
-      filterIndex = filterIndex + filterLength + criterion.getSize();
-      filterLength = 0;
-    }
-  });
-  if (filterLength > 0) {
-    filters.push(toFilter(buffer, filterIndex, filterIndex + filterLength));
-  }
-
-  return filters;
-}
-
-function toFilter(
-  buffer: Buffer,
-  startIndex: number,
-  endIndex: number,
-): MemcmpFilter {
-  return {
-    memcmp: {
-      offset: startIndex,
-      bytes: bs58.encode(buffer.subarray(startIndex, endIndex)),
-    },
-  };
 }
