@@ -125,7 +125,7 @@ export abstract class AccountQuery {
   }
 }
 
-abstract class Criterion<T> {
+export abstract class Criterion<T> {
   private offset: number;
   private size: number;
   private value?: T;
