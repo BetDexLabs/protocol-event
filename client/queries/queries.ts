@@ -1,28 +1,27 @@
 import { Connection, MemcmpFilter, PublicKey } from "@solana/web3.js";
 import bs58 from "bs58";
-import { Event } from "../accounts";
 import { PROGRAM_ID } from "../programId";
 
 export const GET_MULTIPLE_ACCOUNTS_LIMIT = 99;
 
-interface QueryableAccountClass {
+interface QueryableAccountClass<T> {
   discriminator: Buffer;
   fetchMultiple(
     c: Connection,
     addresses: PublicKey[],
-  ): Promise<Array<Event | null>>;
+  ): Promise<Array<T | null>>;
   fetch(
     c: Connection,
     address: PublicKey,
-  ): Promise<Event | null>;
+  ): Promise<T | null>;
 }
 
-export abstract class AccountQuery {
+export abstract class AccountQuery<T> {
   private readonly connection: Connection;
-  private accountClass: QueryableAccountClass;
+  private accountClass: QueryableAccountClass<T>;
   protected filters: Map<string, Criterion<unknown>>;
 
-  protected constructor(connection: Connection, accountClass: QueryableAccountClass, filters: Map<string, Criterion<unknown>>) {
+  protected constructor(connection: Connection, accountClass: QueryableAccountClass<T>, filters: Map<string, Criterion<unknown>>) {
     this.connection = connection;
     this.accountClass = accountClass;
     this.filters = filters;
@@ -55,7 +54,7 @@ export abstract class AccountQuery {
   public async fetch() {
     const publicKeys = await this.fetchPublicKeys();
 
-    let accounts = [];
+    let accounts: T[] = [];
 
     try {
       if (publicKeys.length <= GET_MULTIPLE_ACCOUNTS_LIMIT) {

@@ -2,7 +2,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import { AccountQuery, BooleanCriterion, Criterion, PublicKeyCriterion } from "./queries";
 import { Event } from "../accounts";
 
-export class Events extends AccountQuery {
+export class Events extends AccountQuery<Event> {
   public static eventQuery(connection: Connection) {
     return new Events(connection);
   }
