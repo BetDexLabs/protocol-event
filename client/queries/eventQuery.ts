@@ -1,5 +1,5 @@
 import { Connection, PublicKey } from "@solana/web3.js";
-import { AccountQuery, BooleanCriterion, PublicKeyCriterion } from "./queries";
+import { AccountQuery, BooleanCriterion, Criterion, PublicKeyCriterion } from "./queries";
 import { Event } from "../accounts";
 
 export class Events extends AccountQuery {
@@ -9,7 +9,7 @@ export class Events extends AccountQuery {
 
   constructor(connection: Connection) {
 
-    super(connection, Event, new Map<string, PublicKeyCriterion | BooleanCriterion>([
+    super(connection, Event, new Map<string, Criterion<unknown>>([
         ["authority", new PublicKeyCriterion(8)],
         ["category", new PublicKeyCriterion(8 + 32)],
         ["eventGroup", new PublicKeyCriterion(8 + 32 + 32)],
