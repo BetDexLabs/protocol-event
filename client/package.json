@@ -1,5 +1,5 @@
 {
-  "name": "@monaco-protocol/protocol-event-client",
+  "name": "@monaco-protocol/event-client",
   "version": "0.1.0",
   "description": "Interface package for the Monaco Protocol Events program on Solana",
   "author": "Monaco Protocol",
