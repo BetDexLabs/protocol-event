@@ -70,14 +70,6 @@ export async function addEventParticipants() {
   const program = await getProgram();
   const event = await program.account.event.fetch(eventPk);
 
-  console.log(participants);
-  console.log(
-    participants
-      .slice(1, -1)
-      .split(",")
-      .map((id) => parseInt(id)),
-  );
-
   const addEventParticipantsArgs = {
     code: event.code,
     participantsToAdd: participants
