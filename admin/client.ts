@@ -1,6 +1,11 @@
 import { getAnchorProvider } from "./util";
 import * as anchor from "@coral-xyz/anchor";
-import { addEventParticipants, createEvent } from "./createEvent";
+import {
+  activateEvent,
+  addEventParticipants,
+  createEvent,
+  deactivateEvent,
+} from "./event";
 import { createCategory } from "./category";
 import { createEventGroup } from "./eventGroup";
 import { createParticipant } from "./participant";
@@ -31,8 +36,17 @@ switch (script) {
   case "addEventParticipants":
     addEventParticipants();
     break;
+  case "removeEventParticipants":
+    addEventParticipants();
+    break;
   case "close":
     close();
+    break;
+  case "activateEvent":
+    activateEvent();
+    break;
+  case "deactivateEvent":
+    deactivateEvent();
     break;
   default:
     printUsageAndExit();
