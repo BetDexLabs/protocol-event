@@ -9,7 +9,7 @@ import {
 
 export async function createCategory() {
   if (process.argv.length < 4) {
-    console.log("Usage: yarn run createCategory <CODE> <NAME>>");
+    console.log("Usage: yarn run createCategory <CODE> <NAME>");
     process.exit(1);
   }
 

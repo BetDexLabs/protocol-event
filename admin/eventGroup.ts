@@ -9,9 +9,7 @@ import {
 
 export async function createEventGroup() {
   if (process.argv.length < 5) {
-    console.log(
-      "Usage: yarn run createEventGroup <CATEGORY_PK> <CODE> <NAME>>",
-    );
+    console.log("Usage: yarn run createEventGroup <CATEGORY_PK> <CODE> <NAME>");
     process.exit(1);
   }
 

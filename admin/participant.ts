@@ -18,7 +18,7 @@ import { Program } from "@coral-xyz/anchor";
 export async function createParticipant() {
   if (process.argv.length < 6) {
     console.log(
-      "Usage: yarn run createParticipant <TEAM|INDIVIDUAL> <CATEGORY_PK> <CODE> <NAME>>",
+      "Usage: yarn run createParticipant <TEAM|INDIVIDUAL> <CATEGORY_PK> <CODE> <NAME>",
     );
     process.exit(1);
   }
