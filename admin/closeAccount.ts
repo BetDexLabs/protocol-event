@@ -10,7 +10,7 @@ import { getAnchorProvider, sendTransaction } from "./util";
 export async function close() {
   if (process.argv.length < 4) {
     console.log(
-      "Usage: yarn run createEventGroup <ACCOUNT_DISCRIM> <ACCOUNT_PK>>",
+      "Usage: yarn run createEventGroup <ACCOUNT_DISCRIMINATOR> <ACCOUNT_PK>",
     );
     process.exit(1);
   }

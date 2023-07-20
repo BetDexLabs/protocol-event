@@ -68,7 +68,7 @@ export async function createEvent() {
 export async function addEventParticipants() {
   if (process.argv.length < 4) {
     console.log(
-      "Usage: yarn run addEventParticipants <EVENT_PK> [<PARTICIPANT_IDS>]...",
+      "Usage: yarn run addEventParticipants <EVENT_PK> [<PARTICIPANT_IDS>]",
     );
     process.exit(1);
   }
@@ -106,7 +106,7 @@ export async function addEventParticipants() {
 export async function removeEventParticipants() {
   if (process.argv.length < 4) {
     console.log(
-      "Usage: yarn run removeEventParticipants <EVENT_PK> [<PARTICIPANT_IDS>]...",
+      "Usage: yarn run removeEventParticipants <EVENT_PK> [<PARTICIPANT_IDS>]",
     );
     process.exit(1);
   }
