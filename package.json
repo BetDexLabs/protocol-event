@@ -30,6 +30,7 @@
         "createEventGroup": "ts-node admin/client.ts createEventGroup",
         "createParticipant": "ts-node admin/client.ts createParticipant",
         "addEventParticipants": "ts-node admin/client.ts addEventParticipants",
+        "close": "ts-node admin/client.ts close",
         "runJestTests": "jest --silent --forceExit",
         "test": "anchor test",
         "prepare": "husky install",

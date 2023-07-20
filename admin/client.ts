@@ -4,6 +4,7 @@ import { addEventParticipants, createEvent } from "./createEvent";
 import { createCategory } from "./category";
 import { createEventGroup } from "./eventGroup";
 import { createParticipant } from "./participant";
+import { close } from "./closeAccount";
 
 if (process.argv.length < 3) {
   printUsageAndExit();
@@ -29,6 +30,9 @@ switch (script) {
     break;
   case "addEventParticipants":
     addEventParticipants();
+    break;
+  case "close":
+    close();
     break;
   default:
     printUsageAndExit();
