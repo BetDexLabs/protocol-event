@@ -1,5 +1,6 @@
 import * as anchor from "@coral-xyz/anchor";
-import { findEventPda, getProgram, getAnchorProvider } from "./util";
+import { getProgram, getAnchorProvider } from "./util";
+import { findEventPda } from "./pda";
 
 if (process.argv.length < 4) {
   console.log(
