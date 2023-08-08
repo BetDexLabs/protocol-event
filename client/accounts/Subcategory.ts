@@ -6,7 +6,7 @@ import { PROGRAM_ID } from "../programId"
 
 export interface SubcategoryFields {
   authority: PublicKey
-  classification: PublicKey
+  category: PublicKey
   code: string
   name: string
   participantCount: number
@@ -15,7 +15,7 @@ export interface SubcategoryFields {
 
 export interface SubcategoryJSON {
   authority: string
-  classification: string
+  category: string
   code: string
   name: string
   participantCount: number
@@ -24,7 +24,7 @@ export interface SubcategoryJSON {
 
 export class Subcategory {
   readonly authority: PublicKey
-  readonly classification: PublicKey
+  readonly category: PublicKey
   readonly code: string
   readonly name: string
   readonly participantCount: number
@@ -36,7 +36,7 @@ export class Subcategory {
 
   static readonly layout = borsh.struct([
     borsh.publicKey("authority"),
-    borsh.publicKey("classification"),
+    borsh.publicKey("category"),
     borsh.str("code"),
     borsh.str("name"),
     borsh.u16("participantCount"),
@@ -45,7 +45,7 @@ export class Subcategory {
 
   constructor(fields: SubcategoryFields) {
     this.authority = fields.authority
-    this.classification = fields.classification
+    this.category = fields.category
     this.code = fields.code
     this.name = fields.name
     this.participantCount = fields.participantCount
@@ -97,7 +97,7 @@ export class Subcategory {
 
     return new Subcategory({
       authority: dec.authority,
-      classification: dec.classification,
+      category: dec.category,
       code: dec.code,
       name: dec.name,
       participantCount: dec.participantCount,
@@ -108,7 +108,7 @@ export class Subcategory {
   toJSON(): SubcategoryJSON {
     return {
       authority: this.authority.toString(),
-      classification: this.classification.toString(),
+      category: this.category.toString(),
       code: this.code,
       name: this.name,
       participantCount: this.participantCount,
@@ -119,7 +119,7 @@ export class Subcategory {
   static fromJSON(obj: SubcategoryJSON): Subcategory {
     return new Subcategory({
       authority: new PublicKey(obj.authority),
-      classification: new PublicKey(obj.classification),
+      category: new PublicKey(obj.category),
       code: obj.code,
       name: obj.name,
       participantCount: obj.participantCount,

@@ -1,6 +1,6 @@
 use crate::error::EventError;
 use crate::instructions::CreateEventInfo;
-use crate::state::classification::Classification;
+use crate::state::category::Category;
 use crate::state::event_group::EventGroup;
 use crate::state::participant::Participant;
 use crate::state::subcategory::Subcategory;
@@ -54,18 +54,18 @@ pub struct UpdateEvent<'info> {
 
 #[derive(Accounts)]
 #[instruction(code: String)]
-pub struct CreateClassification<'info> {
+pub struct CreateCategory<'info> {
     #[account(
         init,
         payer = payer,
         seeds = [
-            b"classification".as_ref(),
+            b"category".as_ref(),
             code.as_ref(),
         ],
         bump,
-        space = Classification::SIZE
+        space = Category::SIZE
     )]
-    pub classification: Account<'info, Classification>,
+    pub category: Account<'info, Category>,
 
     #[account(mut)]
     pub payer: Signer<'info>,
@@ -74,9 +74,9 @@ pub struct CreateClassification<'info> {
 }
 
 #[derive(Accounts)]
-pub struct UpdateClassification<'info> {
+pub struct UpdateCategory<'info> {
     #[account(mut, has_one = authority)]
-    pub classification: Account<'info, Classification>,
+    pub category: Account<'info, Category>,
     pub authority: Signer<'info>,
 }
 
@@ -88,14 +88,14 @@ pub struct CreateSubcategory<'info> {
         payer = payer,
         seeds = [
             b"subcategory".as_ref(),
-            classification.key().as_ref(),
+            category.key().as_ref(),
             code.as_ref(),
         ],
         bump,
         space = Subcategory::SIZE
     )]
     pub subcategory: Account<'info, Subcategory>,
-    pub classification: Account<'info, Classification>,
+    pub category: Account<'info, Category>,
 
     #[account(mut)]
     pub payer: Signer<'info>,
@@ -232,14 +232,14 @@ pub struct CloseParticipant<'info> {
 }
 
 #[derive(Accounts)]
-pub struct CloseClassification<'info> {
+pub struct CloseCategory<'info> {
     #[account(
         mut,
         has_one = authority,
         has_one = payer,
         close = payer,
     )]
-    pub classification: Account<'info, Classification>,
+    pub category: Account<'info, Category>,
     pub authority: Signer<'info>,
     #[account(mut)]
     pub payer: SystemAccount<'info>,

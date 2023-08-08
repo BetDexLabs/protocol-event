@@ -13,7 +13,7 @@ import { CreateEventInfo } from "../util/constants";
 import {
   eplEventGroupPda,
   footballSubcategoryPda,
-  sportClassificationPda,
+  sportCategoryPda,
 } from "../util/pda";
 import { Events } from "../../client/queries";
 import assert from "assert";
@@ -171,7 +171,7 @@ describe("Test Client Queries", () => {
 
     const subcategoryPk = await createSubcategory(
       program,
-      sportClassificationPda(),
+      sportCategoryPda(),
       "C1",
       "Test Category 1",
     );

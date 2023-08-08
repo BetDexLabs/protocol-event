@@ -1,26 +1,26 @@
 use crate::error::EventError;
-use crate::state::classification::Classification;
+use crate::state::category::Category;
 use crate::state::event_group::EventGroup;
 use crate::state::subcategory::Subcategory;
 use anchor_lang::prelude::*;
 
-pub fn create_classification(
-    classification: &mut Classification,
+pub fn create_category(
+    category: &mut Category,
     payer: Pubkey,
     code: String,
     name: String,
 ) -> Result<()> {
-    validate_classification(&code, &name)?;
+    validate_category(&code, &name)?;
 
-    classification.payer = payer;
-    classification.authority = payer;
-    classification.code = code;
-    classification.name = name;
+    category.payer = payer;
+    category.authority = payer;
+    category.code = code;
+    category.name = name;
 
     Ok(())
 }
 
-fn validate_classification(code: &String, name: &String) -> Result<()> {
+fn validate_category(code: &String, name: &String) -> Result<()> {
     require!(
         code.len() <= Subcategory::MAX_CODE_LENGTH,
         EventError::MaxStringLengthExceeded,
@@ -34,14 +34,14 @@ fn validate_classification(code: &String, name: &String) -> Result<()> {
 
 pub fn create_subcategory(
     subcategory: &mut Subcategory,
-    classification: Pubkey,
+    category: Pubkey,
     payer: Pubkey,
     code: String,
     name: String,
 ) -> Result<()> {
     validate_subcategory(&code, &name)?;
 
-    subcategory.classification = classification;
+    subcategory.category = category;
     subcategory.payer = payer;
     subcategory.authority = payer;
     subcategory.code = code;
@@ -111,24 +111,24 @@ mod tests {
             participant_count: 0,
             authority: Default::default(),
             payer: Default::default(),
-            classification: Default::default(),
+            category: Default::default(),
         };
 
-        let classification = Pubkey::new_unique();
+        let category = Pubkey::new_unique();
         let code = "FOOTBALL".to_string();
         let name = "Football".to_string();
         let payer = Pubkey::new_unique();
 
         let result = create_subcategory(
             &mut new_subcategory,
-            classification,
+            category,
             payer,
             code.clone(),
             name.clone(),
         );
 
         assert!(result.is_ok());
-        assert_eq!(new_subcategory.classification, classification);
+        assert_eq!(new_subcategory.category, category);
         assert_eq!(new_subcategory.payer, payer);
         assert_eq!(new_subcategory.authority, payer);
         assert_eq!(new_subcategory.code, code);

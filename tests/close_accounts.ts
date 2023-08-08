@@ -10,7 +10,7 @@ import * as anchor from "@coral-xyz/anchor";
 import { BN, Program } from "@coral-xyz/anchor";
 import { ProtocolEvent } from "../target/types/protocol_event";
 import assert from "assert";
-import { sportClassificationPda } from "./util/pda";
+import { sportCategoryPda } from "./util/pda";
 
 describe("Close Accounts", () => {
   it("Success", async () => {
@@ -20,7 +20,7 @@ describe("Close Accounts", () => {
 
     const subcategoryPk = await createSubcategory(
       program,
-      sportClassificationPda(),
+      sportCategoryPda(),
       "CLOSE",
       "To Close",
       payer,

@@ -104,25 +104,18 @@ pub mod protocol_event {
 
     // Grouping management instructions
 
-    pub fn create_classification(
-        ctx: Context<CreateClassification>,
-        code: String,
-        name: String,
-    ) -> Result<()> {
-        instructions::create_grouping::create_classification(
-            &mut ctx.accounts.classification,
+    pub fn create_category(ctx: Context<CreateCategory>, code: String, name: String) -> Result<()> {
+        instructions::create_grouping::create_category(
+            &mut ctx.accounts.category,
             ctx.accounts.payer.key(),
             code,
             name,
         )
     }
 
-    pub fn update_classification_name(
-        ctx: Context<UpdateClassification>,
-        updated_name: String,
-    ) -> Result<()> {
-        instructions::update_grouping::update_classification_name(
-            &mut ctx.accounts.classification,
+    pub fn update_category_name(ctx: Context<UpdateCategory>, updated_name: String) -> Result<()> {
+        instructions::update_grouping::update_category_name(
+            &mut ctx.accounts.category,
             updated_name,
         )
     }
@@ -134,7 +127,7 @@ pub mod protocol_event {
     ) -> Result<()> {
         instructions::create_grouping::create_subcategory(
             &mut ctx.accounts.subcategory,
-            ctx.accounts.classification.key(),
+            ctx.accounts.category.key(),
             ctx.accounts.payer.key(),
             code,
             name,
@@ -241,7 +234,7 @@ pub mod protocol_event {
         Ok(())
     }
 
-    pub fn close_classification(_ctx: Context<CloseClassification>) -> Result<()> {
+    pub fn close_category(_ctx: Context<CloseCategory>) -> Result<()> {
         Ok(())
     }
 

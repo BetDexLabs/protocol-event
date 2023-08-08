@@ -4,7 +4,7 @@ import { ProtocolEvent } from "../../target/types/protocol_event";
 import { CreateEventInfo } from "./constants";
 import {
   findSubcategoryPda,
-  findClassificationPda,
+  findCategoryPda,
   findEventGroupPda,
   findEventPda,
   findParticipantPda,
@@ -90,17 +90,17 @@ export async function removeEventParticipants(
     });
 }
 
-export async function createClassification(
+export async function createCategory(
   program: Program<ProtocolEvent>,
   code: string,
   name: string,
   signer?: Keypair,
 ) {
-  const classificationPk = findClassificationPda(code, program as Program);
+  const categoryPk = findCategoryPda(code, program as Program);
   await program.methods
-    .createClassification(code, name)
+    .createCategory(code, name)
     .accounts({
-      classification: classificationPk,
+      category: categoryPk,
       payer: signer ? signer.publicKey : program.provider.publicKey,
       systemProgram: SystemProgram.programId,
     })
@@ -110,18 +110,18 @@ export async function createClassification(
       console.error(e);
       throw e;
     });
-  return classificationPk;
+  return categoryPk;
 }
 
 export async function createSubcategory(
   program: Program<ProtocolEvent>,
-  classificationPk: PublicKey,
+  categoryPk: PublicKey,
   code: string,
   name: string,
   signer?: Keypair,
 ) {
   const subcategoryPk = findSubcategoryPda(
-    classificationPk,
+    categoryPk,
     code,
     program as Program,
   );
@@ -129,7 +129,7 @@ export async function createSubcategory(
     .createSubcategory(code, name)
     .accounts({
       subcategory: subcategoryPk,
-      classification: classificationPk,
+      category: categoryPk,
       payer: signer ? signer.publicKey : program.provider.publicKey,
       systemProgram: SystemProgram.programId,
     })

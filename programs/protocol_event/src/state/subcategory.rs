@@ -4,7 +4,7 @@ use anchor_lang::prelude::*;
 #[account]
 pub struct Subcategory {
     pub authority: Pubkey,
-    pub classification: Pubkey,
+    pub category: Pubkey,
     pub code: String,
     pub name: String,
     pub participant_count: u16, // current number of Participant accounts created for Category

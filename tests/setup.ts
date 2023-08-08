@@ -2,7 +2,7 @@ import * as anchor from "@coral-xyz/anchor";
 import { ProtocolEvent } from "../target/types/protocol_event";
 import {
   createSubcategory,
-  createClassification,
+  createCategory,
   createEventGroup,
   createIndividualParticipant,
 } from "./util/test_util";
@@ -13,14 +13,10 @@ module.exports = async function (_globalConfig, _projectConfig) {
   anchor.setProvider(provider);
 
   // create some default grouping accounts
-  const classificationPk = await createClassification(
-    program,
-    "SPORT",
-    "Sport",
-  );
+  const categoryPk = await createCategory(program, "SPORT", "Sport");
   const subcategoryPk = await createSubcategory(
     program,
-    classificationPk,
+    categoryPk,
     "FOOTBALL",
     "Soccer",
   );

@@ -1,5 +1,5 @@
-export { Classification } from "./Classification"
-export type { ClassificationFields, ClassificationJSON } from "./Classification"
+export { Category } from "./Category"
+export type { CategoryFields, CategoryJSON } from "./Category"
 export { EventGroup } from "./EventGroup"
 export type { EventGroupFields, EventGroupJSON } from "./EventGroup"
 export { Event } from "./Event"

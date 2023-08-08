@@ -10,24 +10,21 @@ export function findEventPda(code: string, program: Program): PublicKey {
   return pda;
 }
 
-export function findClassificationPda(
-  code: string,
-  program: Program,
-): PublicKey {
+export function findCategoryPda(code: string, program: Program): PublicKey {
   const [pda] = PublicKey.findProgramAddressSync(
-    [Buffer.from("classification"), Buffer.from(code)],
+    [Buffer.from("category"), Buffer.from(code)],
     program.programId,
   );
   return pda;
 }
 
 export function findSubcategoryPda(
-  classification: PublicKey,
+  category: PublicKey,
   code: string,
   program: Program,
 ): PublicKey {
   const [pda] = PublicKey.findProgramAddressSync(
-    [Buffer.from("subcategory"), classification.toBuffer(), Buffer.from(code)],
+    [Buffer.from("subcategory"), category.toBuffer(), Buffer.from(code)],
     program.programId,
   );
   return pda;
@@ -45,14 +42,14 @@ export function findEventGroupPda(
   return pda;
 }
 
-export function sportClassificationPda(): PublicKey {
+export function sportCategoryPda(): PublicKey {
   const program: anchor.Program = anchor.workspace.ProtocolEvent;
-  return findClassificationPda("SPORT", program);
+  return findCategoryPda("SPORT", program);
 }
 
 export function footballSubcategoryPda(): PublicKey {
   const program: anchor.Program = anchor.workspace.ProtocolEvent;
-  return findSubcategoryPda(sportClassificationPda(), "FOOTBALL", program);
+  return findSubcategoryPda(sportCategoryPda(), "FOOTBALL", program);
 }
 
 export function eplEventGroupPda(): PublicKey {

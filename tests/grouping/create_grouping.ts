@@ -1,29 +1,27 @@
 import * as anchor from "@coral-xyz/anchor";
 import {
   createSubcategory,
-  createClassification,
+  createCategory,
   createEventGroup,
 } from "../util/test_util";
 import assert from "assert";
 import { getAnchorProvider } from "../../admin/util";
-import { sportClassificationPda } from "../util/pda";
+import { sportCategoryPda } from "../util/pda";
 
 describe("Create Grouping Accounts", () => {
-  it("Create Classification - Success", async () => {
+  it("Create Category - Success", async () => {
     const program = anchor.workspace.ProtocolEvent;
 
     const code = "POLITICS";
     const name = "Politics";
-    const classificationPk = await createClassification(program, code, name);
+    const categoryPk = await createCategory(program, code, name);
 
-    const classification = await program.account.classification.fetch(
-      classificationPk,
-    );
-    assert.equal(code, classification.code);
-    assert.equal(name, classification.name);
+    const category = await program.account.category.fetch(categoryPk);
+    assert.equal(code, category.code);
+    assert.equal(name, category.name);
     assert.equal(
       getAnchorProvider().publicKey.toBase58(),
-      classification.payer.toBase58(),
+      category.payer.toBase58(),
     );
   });
 
@@ -34,7 +32,7 @@ describe("Create Grouping Accounts", () => {
     const name = "Code Collecting";
     const subcategoryPk = await createSubcategory(
       program,
-      sportClassificationPda(),
+      sportCategoryPda(),
       code,
       name,
     );
@@ -54,7 +52,7 @@ describe("Create Grouping Accounts", () => {
 
     const subcategoryPk = await createSubcategory(
       program,
-      sportClassificationPda(),
+      sportCategoryPda(),
       "MUSH",
       "Mushroom Stomping",
     );

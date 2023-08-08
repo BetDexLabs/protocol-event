@@ -1,37 +1,36 @@
 import * as anchor from "@coral-xyz/anchor";
 import {
   createSubcategory,
-  createClassification,
+  createCategory,
   createEventGroup,
 } from "../util/test_util";
 import assert from "assert";
-import { sportClassificationPda } from "../util/pda";
+import { sportCategoryPda } from "../util/pda";
 
 describe("Update Grouping Accounts", () => {
-  it("Update classification", async () => {
+  it("Update category", async () => {
     const program = anchor.workspace.ProtocolEvent;
 
     const code = "ESPORTS";
     const name = "Excellent Sports";
-    const classificationPk = await createClassification(program, code, name);
+    const categoryPk = await createCategory(program, code, name);
 
-    const classification = await program.account.classification.fetch(
-      classificationPk,
-    );
-    assert.equal(code, classification.code);
-    assert.equal(name, classification.name);
+    const category = await program.account.category.fetch(categoryPk);
+    assert.equal(code, category.code);
+    assert.equal(name, category.name);
 
     const updatedName = "Exceptional Sports";
     await program.methods
-      .updateClassificationName(updatedName)
+      .updateCategoryName(updatedName)
       .accounts({
-        classification: classificationPk,
+        category: categoryPk,
         authority: program.provider.publicKey,
       })
       .rpc();
 
-    const classificiationAfterUpdate =
-      await program.account.classification.fetch(classificationPk);
+    const classificiationAfterUpdate = await program.account.category.fetch(
+      categoryPk,
+    );
     assert.equal(updatedName, classificiationAfterUpdate.name);
   });
 
@@ -42,7 +41,7 @@ describe("Update Grouping Accounts", () => {
     const name = "Bean Throwing";
     const subcategoryPk = await createSubcategory(
       program,
-      sportClassificationPda(),
+      sportCategoryPda(),
       code,
       name,
     );
@@ -71,7 +70,7 @@ describe("Update Grouping Accounts", () => {
 
     const subcategoryPk = await createSubcategory(
       program,
-      sportClassificationPda(),
+      sportCategoryPda(),
       "FLCC",
       "Four-Leaf Clover Collecting",
     );

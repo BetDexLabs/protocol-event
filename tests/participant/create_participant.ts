@@ -9,7 +9,7 @@ import { Program } from "@coral-xyz/anchor";
 import {
   findParticipantPda,
   footballSubcategoryPda,
-  sportClassificationPda,
+  sportCategoryPda,
 } from "../util/pda";
 import assert from "assert";
 import { getAnchorProvider } from "../../admin/util";
@@ -75,7 +75,7 @@ describe("Create Participants", () => {
 
     const subcategoryPk = await createSubcategory(
       program,
-      sportClassificationPda(),
+      sportCategoryPda(),
       "SPORT",
       "Sportsball 99",
     );
@@ -129,7 +129,7 @@ describe("Create Participants", () => {
 
     const subcategoryPk = await createSubcategory(
       program,
-      sportClassificationPda(),
+      sportCategoryPda(),
       "CAUTH",
       "CategoryDefaultAuth",
     );
