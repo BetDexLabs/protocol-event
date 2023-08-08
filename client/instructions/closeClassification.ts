@@ -5,7 +5,7 @@ import * as types from "../types" // eslint-disable-line @typescript-eslint/no-u
 import { PROGRAM_ID } from "../programId"
 
 export interface CloseClassificationAccounts {
-  category: PublicKey
+  classification: PublicKey
   authority: PublicKey
   payer: PublicKey
 }
@@ -15,7 +15,7 @@ export function closeClassification(
   programId: PublicKey = PROGRAM_ID
 ) {
   const keys: Array<AccountMeta> = [
-    { pubkey: accounts.category, isSigner: false, isWritable: true },
+    { pubkey: accounts.classification, isSigner: false, isWritable: true },
     { pubkey: accounts.authority, isSigner: true, isWritable: false },
     { pubkey: accounts.payer, isSigner: false, isWritable: true },
   ]

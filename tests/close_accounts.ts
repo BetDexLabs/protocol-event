@@ -1,5 +1,5 @@
 import {
-  createCategory,
+  createSubcategory,
   createEvent,
   createEventGroup,
   createIndividualParticipant,
@@ -18,7 +18,7 @@ describe("Close Accounts", () => {
 
     const payer = await createWalletWithBalance();
 
-    const categoryPk = await createCategory(
+    const subcategoryPk = await createSubcategory(
       program,
       sportClassificationPda(),
       "CLOSE",
@@ -27,21 +27,21 @@ describe("Close Accounts", () => {
     );
     const eventGroupPk = await createEventGroup(
       program,
-      categoryPk,
+      subcategoryPk,
       "CLOSE",
       "To Close",
       payer,
     );
     const individualPk = await createIndividualParticipant(
       program,
-      categoryPk,
+      subcategoryPk,
       "CLOSE",
       "To Close",
       payer,
     );
     const teamPk = await createTeamParticipant(
       program,
-      categoryPk,
+      subcategoryPk,
       "CLOSE",
       "To Close",
       payer,
@@ -55,21 +55,21 @@ describe("Close Accounts", () => {
         actualStartTimestamp: null,
         expectedStartTimestamp: new BN(1689169672),
       },
-      categoryPk,
+      subcategoryPk,
       eventGroupPk,
       payer,
     );
 
     await program.methods
-      .closeCategory()
+      .closeSubcategory()
       .accounts({
-        category: categoryPk,
+        subcategory: subcategoryPk,
         authority: payer.publicKey,
         payer: payer.publicKey,
       })
       .signers([payer])
       .rpc();
-    await assertAccountClosed(program.account.category.fetch(categoryPk));
+    await assertAccountClosed(program.account.subcategory.fetch(subcategoryPk));
 
     await program.methods
       .closeEventGroup()

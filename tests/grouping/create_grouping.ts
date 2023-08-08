@@ -1,6 +1,6 @@
 import * as anchor from "@coral-xyz/anchor";
 import {
-  createCategory,
+  createSubcategory,
   createClassification,
   createEventGroup,
 } from "../util/test_util";
@@ -27,32 +27,32 @@ describe("Create Grouping Accounts", () => {
     );
   });
 
-  it("Create Category - Success", async () => {
+  it("Create Subcategory - Success", async () => {
     const program = anchor.workspace.ProtocolEvent;
 
     const code = "SC";
     const name = "Code Collecting";
-    const categoryPk = await createCategory(
+    const subcategoryPk = await createSubcategory(
       program,
       sportClassificationPda(),
       code,
       name,
     );
 
-    const category = await program.account.category.fetch(categoryPk);
-    assert.equal(code, category.code);
-    assert.equal(name, category.name);
-    assert.equal(0, category.participantCount);
+    const subcategory = await program.account.subcategory.fetch(subcategoryPk);
+    assert.equal(code, subcategory.code);
+    assert.equal(name, subcategory.name);
+    assert.equal(0, subcategory.participantCount);
     assert.equal(
       getAnchorProvider().publicKey.toBase58(),
-      category.payer.toBase58(),
+      subcategory.payer.toBase58(),
     );
   });
 
   it("Create Event Group - Success", async () => {
     const program = anchor.workspace.ProtocolEvent;
 
-    const categoryPk = await createCategory(
+    const subcategoryPk = await createSubcategory(
       program,
       sportClassificationPda(),
       "MUSH",
@@ -63,13 +63,13 @@ describe("Create Grouping Accounts", () => {
     const name = "Mushroom Stompers Association UK";
     const eventGroupPk = await createEventGroup(
       program,
-      categoryPk,
+      subcategoryPk,
       code,
       name,
     );
 
     const eventGroup = await program.account.eventGroup.fetch(eventGroupPk);
-    assert.equal(categoryPk.toBase58(), eventGroup.category.toBase58());
+    assert.equal(subcategoryPk.toBase58(), eventGroup.subcategory.toBase58());
     assert.equal(code, eventGroup.code);
     assert.equal(name, eventGroup.name);
     assert.equal(

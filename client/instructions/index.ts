@@ -47,16 +47,16 @@ export type {
   UpdateClassificationNameArgs,
   UpdateClassificationNameAccounts,
 } from "./updateClassificationName"
-export { createCategory } from "./createCategory"
+export { createSubcategory } from "./createSubcategory"
 export type {
-  CreateCategoryArgs,
-  CreateCategoryAccounts,
-} from "./createCategory"
-export { updateCategoryName } from "./updateCategoryName"
+  CreateSubcategoryArgs,
+  CreateSubcategoryAccounts,
+} from "./createSubcategory"
+export { updateSubcategoryName } from "./updateSubcategoryName"
 export type {
-  UpdateCategoryNameArgs,
-  UpdateCategoryNameAccounts,
-} from "./updateCategoryName"
+  UpdateSubcategoryNameArgs,
+  UpdateSubcategoryNameAccounts,
+} from "./updateSubcategoryName"
 export { createEventGroup } from "./createEventGroup"
 export type {
   CreateEventGroupArgs,
@@ -97,7 +97,7 @@ export { closeClassification } from "./closeClassification"
 export type { CloseClassificationAccounts } from "./closeClassification"
 export { closeEventGroup } from "./closeEventGroup"
 export type { CloseEventGroupAccounts } from "./closeEventGroup"
-export { closeCategory } from "./closeCategory"
-export type { CloseCategoryAccounts } from "./closeCategory"
+export { closeSubcategory } from "./closeSubcategory"
+export type { CloseSubcategoryAccounts } from "./closeSubcategory"
 export { closeParticipant } from "./closeParticipant"
 export type { CloseParticipantAccounts } from "./closeParticipant"

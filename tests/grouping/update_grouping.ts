@@ -1,6 +1,6 @@
 import * as anchor from "@coral-xyz/anchor";
 import {
-  createCategory,
+  createSubcategory,
   createClassification,
   createEventGroup,
 } from "../util/test_util";
@@ -40,28 +40,28 @@ describe("Update Grouping Accounts", () => {
 
     const code = "BT";
     const name = "Bean Throwing";
-    const categoryPk = await createCategory(
+    const subcategoryPk = await createSubcategory(
       program,
       sportClassificationPda(),
       code,
       name,
     );
 
-    const category = await program.account.category.fetch(categoryPk);
-    assert.equal(code, category.code);
-    assert.equal(name, category.name);
+    const subcategory = await program.account.subcategory.fetch(subcategoryPk);
+    assert.equal(code, subcategory.code);
+    assert.equal(name, subcategory.name);
 
     const updatedName = "Bean Throwing UK";
     await program.methods
-      .updateCategoryName(updatedName)
+      .updateSubcategoryName(updatedName)
       .accounts({
-        category: categoryPk,
+        subcategory: subcategoryPk,
         authority: program.provider.publicKey,
       })
       .rpc();
 
-    const categoryAfterUpdate = await program.account.category.fetch(
-      categoryPk,
+    const categoryAfterUpdate = await program.account.subcategory.fetch(
+      subcategoryPk,
     );
     assert.equal(updatedName, categoryAfterUpdate.name);
   });
@@ -69,7 +69,7 @@ describe("Update Grouping Accounts", () => {
   it("Update event group", async () => {
     const program = anchor.workspace.ProtocolEvent;
 
-    const categoryPk = await createCategory(
+    const subcategoryPk = await createSubcategory(
       program,
       sportClassificationPda(),
       "FLCC",
@@ -80,7 +80,7 @@ describe("Update Grouping Accounts", () => {
     const name = "Premier Four-Leaf Clover Collecting";
     const eventGroupPk = await createEventGroup(
       program,
-      categoryPk,
+      subcategoryPk,
       code,
       name,
     );
