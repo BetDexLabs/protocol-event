@@ -9,7 +9,9 @@ import {
 
 export async function createSubcategory() {
   if (process.argv.length < 5) {
-    console.log("Usage: yarn run createCategory <CATEGORY_PK> <CODE> <NAME>");
+    console.log(
+      "Usage: yarn run createSubcategory <CATEGORY_PK> <CODE> <NAME>",
+    );
     process.exit(1);
   }
 
