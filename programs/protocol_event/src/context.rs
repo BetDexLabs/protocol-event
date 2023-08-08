@@ -61,9 +61,9 @@ pub struct CreateClassification<'info> {
         seeds = [
         b"classification".as_ref(),
         code.as_ref(),
-    ],
-    bump,
-    space = Classification::SIZE
+        ],
+        bump,
+        space = Classification::SIZE
     )]
     pub classification: Account<'info, Classification>,
 
